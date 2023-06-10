@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://x2ps8dephmt6"]
+
+[ext_resource type="Texture2D" uid="uid://bhc18ope5ji7o" path="res://bitmap/minebtn/unpressed.tres" id="1_r5j7s"]
+[ext_resource type="Texture2D" uid="uid://bji8lg5xwknrg" path="res://bitmap/minebtn/blank.tres" id="2_pkol5"]
+[ext_resource type="Script" path="res://minebutton.gd" id="3_auht0"]
+
+[node name="minebutton" type="TextureButton"]
+offset_right = 16.0
+offset_bottom = 16.0
+texture_normal = ExtResource("1_r5j7s")
+texture_pressed = ExtResource("2_pkol5")
+script = ExtResource("3_auht0")
+
+[connection signal="button_down" from="." to="." method="_on_button_down"]
+[connection signal="button_up" from="." to="." method="_on_button_up"]
+[connection signal="pressed" from="." to="." method="_on_pressed"]
