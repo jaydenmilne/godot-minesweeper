@@ -1,6 +1,5 @@
 TODO
 
-- Fix top bar layout
 - Variable board sizing
 - Sound
 - Game Menu
@@ -25,3 +24,4 @@ Done:
 - Timer starts at one
 - Timer value is not reset
 - Implement winning
+- Fix top bar layout

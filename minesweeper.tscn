@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://cvoiy5pk06wqi"]
+[gd_scene load_steps=10 format=3 uid="uid://cvoiy5pk06wqi"]
 
 [ext_resource type="Script" path="res://minesweeper.gd" id="1_7x103"]
 [ext_resource type="Texture2D" uid="uid://ccqqlic3sl2hv" path="res://bitmap/9patch.png" id="2_crupm"]
 [ext_resource type="PackedScene" uid="uid://bi7dgcbwgxd7j" path="res://counter.tscn" id="3_nlgsr"]
+[ext_resource type="Texture2D" uid="uid://sw5od8doucr0" path="res://bitmap/face/button_frame.png" id="4_awbk7"]
 [ext_resource type="Texture2D" uid="uid://hco6ldm5p3k2" path="res://bitmap/face/face_happy.tres" id="4_iuhcx"]
 [ext_resource type="Texture2D" uid="uid://bfosekfknaxt6" path="res://bitmap/face/face_pressed.tres" id="5_q6t5u"]
 [ext_resource type="Texture2D" uid="uid://bisxb31ivom1r" path="res://bitmap/410.bmp" id="6_o3s8q"]
@@ -33,8 +34,8 @@ sources/0 = SubResource("TileSetAtlasSource_cwamf")
 script = ExtResource("1_7x103")
 
 [node name="Window" type="NinePatchRect" parent="."]
-offset_right = 171.0
-offset_bottom = 254.0
+offset_right = 170.0
+offset_bottom = 251.0
 texture = ExtResource("2_crupm")
 region_rect = Rect2(0, 0, 170, 251)
 patch_margin_left = 100
@@ -42,24 +43,46 @@ patch_margin_top = 205
 patch_margin_right = 56
 patch_margin_bottom = 26
 
-[node name="Bar" type="HBoxContainer" parent="."]
-offset_left = 14.0
-offset_top = 52.0
-offset_right = 161.0
-offset_bottom = 85.0
+[node name="MarginContainer" type="MarginContainer" parent="Window"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 19
+theme_override_constants/margin_top = 56
+theme_override_constants/margin_right = 17
 
-[node name="MineCounter" parent="Bar" instance=ExtResource("3_nlgsr")]
+[node name="Bar" type="HBoxContainer" parent="Window/MarginContainer"]
+layout_direction = 2
+layout_mode = 2
+size_flags_vertical = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="MineCounter" parent="Window/MarginContainer/Bar" instance=ExtResource("3_nlgsr")]
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="FaceButton" type="TextureButton" parent="Bar"]
+[node name="FaceButtonFrame" type="TextureRect" parent="Window/MarginContainer/Bar"]
+layout_mode = 2
+size_flags_horizontal = 6
+texture = ExtResource("4_awbk7")
+stretch_mode = 3
+
+[node name="FaceButton" type="TextureButton" parent="Window/MarginContainer/Bar/FaceButtonFrame"]
 layout_direction = 3
 layout_mode = 2
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 25.0
+offset_bottom = 25.0
+size_flags_horizontal = 6
 size_flags_vertical = 4
 texture_normal = ExtResource("4_iuhcx")
 texture_pressed = ExtResource("5_q6t5u")
 
-[node name="TimeBox" parent="Bar" instance=ExtResource("3_nlgsr")]
+[node name="TimeBox" parent="Window/MarginContainer/Bar" instance=ExtResource("3_nlgsr")]
 layout_mode = 2
 size_flags_vertical = 4
 
@@ -78,5 +101,5 @@ layer_1/y_sort_origin = 0
 layer_1/z_index = 0
 layer_1/tile_data = PackedInt32Array()
 
-[connection signal="pressed" from="Bar/FaceButton" to="." method="_on_face_button_pressed"]
+[connection signal="pressed" from="Window/MarginContainer/Bar/FaceButtonFrame/FaceButton" to="." method="_on_face_button_pressed"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
