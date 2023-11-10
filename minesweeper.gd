@@ -18,53 +18,67 @@ const QUESTION_PRESSED = Vector2i(0, 6)
 const EMPTY = Vector2i(0, 15)
 
 enum GameState {
-	# kind of a weird state, there is game board and stuff, but the clock is not running
-	NEW_GAME, 
+	READY_TO_START, # kind of a weird state, there is game board and stuff, but the clock is not running
 	GAME_RUNNING,
 	GAME_OVER_LOST,
 	GAME_OVER_WON
 }
 
-var current_state: GameState = GameState.NEW_GAME
+var current_state: GameState = GameState.READY_TO_START
 
 func change_game_state(new_state: GameState):
 	print("changing state %s -> %s" % [GameState.keys()[current_state], GameState.keys()[new_state]])
-	var game_over = func():
+	var game_over_lost = func():
 		$Timer.stop()
 		$Bar/FaceButton.texture_normal = FACE_DEAD
 		show_board()
 	
+	var game_over_won = func():
+		$Timer.stop()
+		$Bar/FaceBotton.texture_normal = FACE_COOL
 	
 	match current_state:
-		GameState.NEW_GAME:
+		GameState.READY_TO_START:
 			match new_state:
 				GameState.GAME_RUNNING:
 					start_game()
 				GameState.GAME_OVER_LOST:
 					# unlucky lol
-					game_over.call()
+					game_over_lost.call()
+				GameState.READY_TO_START:
+					# noop
+					pass
 				_:
 					assert(false, "unexpected transition NEW_WINDOW -> %s" % GameState.keys()[new_state])
 		GameState.GAME_RUNNING:
 			match new_state:
 				GameState.GAME_OVER_LOST:
-					game_over.call()
+					game_over_lost.call()
 				GameState.GAME_RUNNING:
 					# restart
 					update_mine_count(total_mines)
 					start_game()
+				GameState.READY_TO_START:
+					reset_game()
+				GameState.GAME_OVER_WON:
+					game_over_lost.call()
 				_:
 					assert(false, "unexpected transition GAME_RUNNING -> %s" % GameState.keys()[new_state])
 		GameState.GAME_OVER_LOST, GameState.GAME_OVER_WON:
 			match new_state:
-				GameState.GAME_RUNNING:	
+				GameState.GAME_RUNNING:
+					assert(false, "I guess this is used after all")
+					update_mine_count(total_mines)
+					start_game()
+				GameState.READY_TO_START:
 					update_mine_count(total_mines)
 					start_game()
 				_:
-					assert(false, "you forgot to handle state %s" % GameState.keys()[current_state])
+					assert(false, "unexpected transition GAME_OVER_LOST / GAME_OVER_WON -> %s" % GameState.keys()[new_state])
 		_:
 			assert(false, "you forgot to handle state %s" % GameState.keys()[current_state])
 	current_state = new_state
+	
 const NUMBER_LOOKUP = {
 	1: Vector2i(0, 14),
 	2: Vector2i(0, 13),
@@ -146,6 +160,9 @@ func click_cell(location: Vector2i) -> void:
 	
 	if cell & NUMBER_MASK:
 		$Grid.set_cell(0, location, 0, NUMBER_LOOKUP[cell & NUMBER_MASK], 0)
+		cell_data[location.y][location.x] |= FLAG_REVEALED
+		if game_is_won():
+			change_game_state(GameState.GAME_OVER_WON)
 		return # no flooding if you clicked on a number
 	$Grid.set_cell(0, location, 0, EMPTY, 0)
 	
@@ -182,10 +199,28 @@ func click_cell(location: Vector2i) -> void:
 
 		# it's blank, reveal it
 		$Grid.set_cell(0, cur, 0, EMPTY, 0)
-		
+
+	if game_is_won():
+		change_game_state(GameState.GAME_OVER_WON)
+	
+func game_is_won():
+	"""Win condition: every cell is revealed except for the mines"""
+	for x in range(grid_width):
+		for y in range(grid_height):
+			var cell = cell_data[y][x]
+			if cell & FLAG_MINE:
+				continue
+			
+			if (
+				not ( cell & FLAG_REVEALED )  # is blank, revealed tile
+			):
+				# this cell has not been revealed, meaning they aren't done yet
+				return false
+	return true
+
 func _unhandled_input(event) -> void:
 	if event is InputEventMouseButton:
-		if current_state not in [GameState.GAME_RUNNING, GameState.NEW_GAME]:
+		if current_state not in [GameState.GAME_RUNNING, GameState.READY_TO_START]:
 			return
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
@@ -197,7 +232,7 @@ func _unhandled_input(event) -> void:
 				# mouseup
 				var click_grid_location = global2grid(event.position)
 				if loc_in_grid(click_grid_location):
-					if clicking and current_state == GameState.NEW_GAME:
+					if clicking and current_state == GameState.READY_TO_START:
 						change_game_state(GameState.GAME_RUNNING)
 					click_cell(click_grid_location)
 				clicking = false
@@ -215,7 +250,7 @@ func _unhandled_input(event) -> void:
 				right_click_cell(location)
 
 
-const DEBUG_SHOW_BOARD = false
+const DEBUG_SHOW_BOARD = true
 
 func show_board() -> void:
 	"""End-of-game board state"""
@@ -237,7 +272,6 @@ func prepare_board() -> void:
 	cell_data = []
 	
 	# set visible area
-	
 	for x in range(grid_width):
 		var new_row = []
 		new_row.resize(grid_height)
@@ -300,13 +334,19 @@ func _ready():
 func get_cell_type(grid_loc: Vector2i):
 	return $Grid.get_cell_atlas_coords(0, grid_loc)
 
-func start_game():
+func reset_game():
+	"""Get the game back to the default/starting position, but not running"""
 	time = 0
-	$Bar/TimeBox.change_value.emit("000")
+	$Timer.stop()
+	$Bar/TimeBox.change_value.emit("%03d" % time)
 	$Bar/FaceButton.texture_normal = FACE_HAPPY
-	$Timer.start()
 	prepare_board()
 
+func start_game():
+	reset_game()
+	# for some reason it starts at one, so call this method to increment it
+	_on_timer_timeout()
+	$Timer.start()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -325,7 +365,7 @@ func _process(delta):
 			
 
 func _on_face_button_pressed():
-	change_game_state(GameState.NEW_GAME)
+	change_game_state(GameState.READY_TO_START)
 
 func _on_timer_timeout():
 	time = clampi(time + 1, 0, 999)

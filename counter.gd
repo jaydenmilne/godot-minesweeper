@@ -3,6 +3,7 @@ extends TextureRect
 signal change_value(value: String)
 
 func set_value(value: String):
+	assert(len(value) == 3, "this is supposed to be 3 chars long dum dum")
 	$First.texture = lookup[value[0]]
 	$Second.texture = lookup[value[1]]
 	$Third.texture = lookup[value[2]]
