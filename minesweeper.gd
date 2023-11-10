@@ -26,16 +26,19 @@ enum GameState {
 
 var current_state: GameState = GameState.READY_TO_START
 
+func set_face(res: Resource):
+	$Window/MarginContainer/Bar/FaceButtonFrame/FaceButton.texture_normal = res
+
 func change_game_state(new_state: GameState):
 	print("changing state %s -> %s" % [GameState.keys()[current_state], GameState.keys()[new_state]])
 	var game_over_lost = func():
 		$Timer.stop()
-		$Bar/FaceButton.texture_normal = FACE_DEAD
+		set_face(FACE_DEAD)
 		show_board()
 	
 	var game_over_won = func():
 		$Timer.stop()
-		$Bar/FaceBotton.texture_normal = FACE_COOL
+		set_face(FACE_COOL)
 	
 	match current_state:
 		GameState.READY_TO_START:
@@ -117,7 +120,7 @@ func update_mine_count(new_count: int) -> void:
 	var value = "%03d" % mines_remaining
 	if mines_remaining < 0:
 		value[0] = "-"
-	$Bar/MineCounter.change_value.emit(value)
+	$Window/MarginContainer/Bar/MineCounter.change_value.emit(value)
 
 func right_click_cell(location: Vector2i):
 	var type = get_cell_type(location)
@@ -226,7 +229,7 @@ func _unhandled_input(event) -> void:
 			if event.pressed:
 				# always set face to shocked, the game does this for some reason
 				# TODO: not if its in the menu bar
-				$Bar/FaceButton.texture_normal = FACE_OOOOOO
+				set_face(FACE_OOOOOO)
 				clicking = true
 			else:
 				# mouseup
@@ -243,7 +246,7 @@ func _unhandled_input(event) -> void:
 				elif current_state == GameState.GAME_OVER_WON:
 					face_texture = FACE_COOL
 					
-				$Bar/FaceButton.texture_normal = face_texture
+				set_face(face_texture)
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 			var location = global2grid(event.position)
 			if loc_in_grid(location):
@@ -326,8 +329,8 @@ func prepare_board() -> void:
 	
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$Bar/MineCounter.change_value.emit("%03d" % mines_remaining)
-	$Bar/TimeBox.change_value.emit("000")
+	$Window/MarginContainer/Bar/MineCounter.change_value.emit("%03d" % mines_remaining)
+	$Window/MarginContainer/Bar/TimeBox.change_value.emit("000")
 	
 	prepare_board()
 
@@ -338,8 +341,8 @@ func reset_game():
 	"""Get the game back to the default/starting position, but not running"""
 	time = 0
 	$Timer.stop()
-	$Bar/TimeBox.change_value.emit("%03d" % time)
-	$Bar/FaceButton.texture_normal = FACE_HAPPY
+	$Window/MarginContainer/Bar/TimeBox.change_value.emit("%03d" % time)
+	set_face(FACE_HAPPY)
 	prepare_board()
 
 func start_game():
@@ -370,9 +373,9 @@ func _on_face_button_pressed():
 func _on_timer_timeout():
 	time = clampi(time + 1, 0, 999)
 	# TODO: Play sound
-	$Bar/TimeBox.change_value.emit("%03d" % time)
+	$Window/MarginContainer/Bar/TimeBox.change_value.emit("%03d" % time)
 
-const FACE_OOOOOO = preload("res://bitmap/face/face_shocked.tres")
-const FACE_HAPPY = preload("res://bitmap/face/face_happy.tres")
-const FACE_DEAD = preload("res://bitmap/face/face_dead.tres")
-const FACE_COOL = preload("res://bitmap/face/face_cool.tres")
+const FACE_OOOOOO: Resource = preload("res://bitmap/face/face_shocked.tres")
+const FACE_HAPPY: Resource = preload("res://bitmap/face/face_happy.tres")
+const FACE_DEAD: Resource = preload("res://bitmap/face/face_dead.tres")
+const FACE_COOL: Resource = preload("res://bitmap/face/face_cool.tres")
