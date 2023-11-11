@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://f7tmw4o84w3"]
+
+[ext_resource type="PackedScene" uid="uid://cvoiy5pk06wqi" path="res://minesweeper.tscn" id="1_0ejun"]
+
+[node name="desktop" type="Node2D"]
+
+[node name="Minesweeper" parent="." instance=ExtResource("1_0ejun")]

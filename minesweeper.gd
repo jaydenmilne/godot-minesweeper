@@ -3,8 +3,8 @@ extends Node2D
 var time: int = 0
 var mines_remaining: int = 10
 
-var grid_width: int = 9
-var grid_height: int = 9
+@export var grid_width: int = 20
+@export var grid_height: int = 20
 var total_mines: int = 10
 
 # atlas indexes
@@ -26,6 +26,25 @@ enum GameState {
 
 var current_state: GameState = GameState.READY_TO_START
 
+
+func set_window_size():
+	"""Resize the 9patch to match the grid size. This could probably be done with no code if I was
+	smarter with godot layout stuff"""
+	
+	# magic numbers!
+	# 
+	var top_height = 96
+	var left_margin = 15
+	var right_margin = 11
+	var bottom_margin =  11
+	
+	var grid_cell_size = 16
+	
+	var width = left_margin + right_margin + grid_cell_size * grid_width
+	var height = top_height + bottom_margin	+ grid_cell_size * grid_height
+	
+	$Window.set_size(Vector2i(width, height))
+	
 func set_face(res: Resource):
 	$Window/MarginContainer/Bar/FaceButtonFrame/FaceButton.texture_normal = res
 
@@ -333,6 +352,7 @@ func _ready():
 	$Window/MarginContainer/Bar/TimeBox.change_value.emit("000")
 	
 	prepare_board()
+	set_window_size()
 
 func get_cell_type(grid_loc: Vector2i):
 	return $Grid.get_cell_atlas_coords(0, grid_loc)

@@ -17,9 +17,9 @@ config/icon="res://icon.svg"
 
 [display]
 
-window/size/viewport_width=170
-window/size/viewport_height=251
-window/stretch/mode="viewport"
+window/size/viewport_width=512
+window/size/viewport_height=512
+window/stretch/mode="canvas_items"
 
 [rendering]
 
@@ -27,3 +27,4 @@ textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="forward_plus"
 renderer/rendering_method.web="forward_plus"
+environment/defaults/default_clear_color=Color(0.227451, 0.431373, 0.647059, 1)
