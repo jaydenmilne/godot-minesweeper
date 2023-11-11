@@ -37,6 +37,10 @@ const FACE_HAPPY: Resource = preload("res://bitmap/face/face_happy.tres")
 const FACE_DEAD: Resource = preload("res://bitmap/face/face_dead.tres")
 const FACE_COOL: Resource = preload("res://bitmap/face/face_cool.tres")
 
+const SOUND_CLOCK: Resource = preload("res://sound/432.wav")
+const SOUND_WIN: Resource = preload("res://sound/434.wav")
+const SOUND_KABOOM: Resource = preload("res://sound/433.wav")
+
 const NUMBER_LOOKUP = {
 	1: Vector2i(0, 14),
 	2: Vector2i(0, 13),
@@ -89,11 +93,17 @@ func change_game_state(new_state: GameState):
 		$Timer.stop()
 		set_face(FACE_DEAD)
 		show_board()
+		if enable_sound:
+			$Sound.stream = SOUND_KABOOM
+			$Sound.play()
 	
 	var game_over_won = func():
 		$Timer.stop()
 		set_face(FACE_COOL)
-	
+		if enable_sound:
+			$Sound.stream = SOUND_WIN
+			$Sound.play()
+			
 	match current_state:
 		GameState.READY_TO_START:
 			match new_state:
@@ -406,7 +416,11 @@ func _on_face_button_pressed():
 
 func _on_timer_timeout():
 	time = clampi(time + 1, 0, 999)
-	# TODO: Play sound
+	
+	if enable_sound:
+		$Sound.stream = SOUND_CLOCK
+		$Sound.play()
+		
 	$Window/MarginContainer/Bar/TimeBox.change_value.emit("%03d" % time)
 
 func _on_menu_bar_new_game():
