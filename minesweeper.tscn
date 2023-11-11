@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cvoiy5pk06wqi"]
+[gd_scene load_steps=11 format=3 uid="uid://cvoiy5pk06wqi"]
 
 [ext_resource type="Script" path="res://minesweeper.gd" id="1_7x103"]
 [ext_resource type="Texture2D" uid="uid://ccqqlic3sl2hv" path="res://bitmap/9patch.png" id="2_crupm"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://hco6ldm5p3k2" path="res://bitmap/face/face_happy.tres" id="4_iuhcx"]
 [ext_resource type="Texture2D" uid="uid://bfosekfknaxt6" path="res://bitmap/face/face_pressed.tres" id="5_q6t5u"]
 [ext_resource type="Texture2D" uid="uid://bisxb31ivom1r" path="res://bitmap/410.bmp" id="6_o3s8q"]
+[ext_resource type="PackedScene" uid="uid://dexhilxkt3sfx" path="res://gui/menubar/menu_bar.tscn" id="8_kg1x7"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cwamf"]
 texture = ExtResource("6_o3s8q")
@@ -30,10 +31,13 @@ texture = ExtResource("6_o3s8q")
 [sub_resource type="TileSet" id="TileSet_4dftg"]
 sources/0 = SubResource("TileSetAtlasSource_cwamf")
 
-[node name="Minesweeper" type="Node2D"]
+[node name="Minesweeper" type="Control"]
+layout_mode = 3
+anchors_preset = 0
 script = ExtResource("1_7x103")
 
 [node name="Window" type="NinePatchRect" parent="."]
+layout_mode = 0
 offset_right = 170.0
 offset_bottom = 251.0
 texture = ExtResource("2_crupm")
@@ -101,5 +105,17 @@ layer_1/y_sort_origin = 0
 layer_1/z_index = 0
 layer_1/tile_data = PackedInt32Array()
 
+[node name="MenuBar" parent="." instance=ExtResource("8_kg1x7")]
+layout_mode = 1
+offset_left = 2.0
+offset_top = 22.0
+offset_right = 2.0
+offset_bottom = 22.0
+
 [connection signal="pressed" from="Window/MarginContainer/Bar/FaceButtonFrame/FaceButton" to="." method="_on_face_button_pressed"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="change_difficulty" from="MenuBar" to="." method="_on_menu_bar_change_difficulty"]
+[connection signal="color_enabled_changed" from="MenuBar" to="." method="_on_menu_bar_color_enabled_changed"]
+[connection signal="marks_enabled_changed" from="MenuBar" to="." method="_on_menu_bar_marks_enabled_changed"]
+[connection signal="new_game" from="MenuBar" to="." method="_on_menu_bar_new_game"]
+[connection signal="sound_enabled_changed" from="MenuBar" to="." method="_on_menu_bar_sound_enabled_changed"]

@@ -19,11 +19,12 @@ config/icon="res://icon.svg"
 
 window/size/viewport_width=512
 window/size/viewport_height=512
-window/stretch/mode="canvas_items"
+window/stretch/mode="viewport"
+window/stretch/aspect="expand"
 
 [rendering]
 
-textures/canvas_textures/default_texture_filter=0
+textures/canvas_textures/default_texture_filter=3
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="forward_plus"
 renderer/rendering_method.web="forward_plus"
