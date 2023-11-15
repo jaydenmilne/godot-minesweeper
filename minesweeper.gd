@@ -82,7 +82,7 @@ func set_window_size():
 	var width = left_margin + right_margin + grid_cell_size * grid_width
 	var height = top_height + bottom_margin	+ grid_cell_size * grid_height
 	
-	$Window.set_size(Vector2i(width, height))
+	self.set_size(Vector2i(width, height))
 	
 func set_face(res: Resource):
 	$Window/MarginContainer/Bar/FaceButtonFrame/FaceButton.texture_normal = res
