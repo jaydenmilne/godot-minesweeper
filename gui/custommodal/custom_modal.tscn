@@ -1,0 +1,116 @@
+[gd_scene load_steps=14 format=3 uid="uid://ds0vch7nlj15y"]
+
+[ext_resource type="Texture2D" uid="uid://b88slcg3c60ov" path="res://gui/custommodal/custom_modal.png" id="1_wl1il"]
+[ext_resource type="Script" path="res://gui/custommodal/custom_modal.gd" id="2_6afgk"]
+[ext_resource type="PackedScene" uid="uid://8gngbugi63d7" path="res://gui/custommodal/numbox.tscn" id="2_eebrp"]
+[ext_resource type="Theme" uid="uid://c6p6p3413tfi6" path="res://gui/theme_system.tres" id="3_e55of"]
+[ext_resource type="Texture2D" uid="uid://vwa2f4v77l03" path="res://gui/custommodal/ok/ok.png" id="4_uwt4d"]
+[ext_resource type="Texture2D" uid="uid://dema30d8g2buj" path="res://gui/custommodal/ok/ok_pressed.png" id="5_oaueb"]
+[ext_resource type="Texture2D" uid="uid://db0c6eqdr2nmx" path="res://gui/custommodal/ok/ok_focus.png" id="6_rceo3"]
+[ext_resource type="Texture2D" uid="uid://oxf3kwq4x8f" path="res://gui/custommodal/cancel/cancel.png" id="7_a60wm"]
+[ext_resource type="Texture2D" uid="uid://ifdb07o4wei8" path="res://gui/custommodal/cancel/cancel_pressed.png" id="8_y10hy"]
+[ext_resource type="Texture2D" uid="uid://ddrisd3030f5r" path="res://gui/close/x.png" id="9_3gjld"]
+[ext_resource type="Texture2D" uid="uid://d1031tc4bnpjf" path="res://gui/close/x_pressed.png" id="10_k61nw"]
+[ext_resource type="Texture2D" uid="uid://bgaxmgrbglx2q" path="res://gui/custommodal/cancel/question.png" id="12_ugq2f"]
+[ext_resource type="Texture2D" uid="uid://snhcbr6vkkl1" path="res://gui/custommodal/cancel/question_pressed.png" id="13_opfcr"]
+
+[node name="CustomModal" type="TextureRect"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -311.0
+offset_bottom = -349.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_wl1il")
+script = ExtResource("2_6afgk")
+
+[node name="Width" parent="." instance=ExtResource("2_eebrp")]
+layout_mode = 0
+offset_left = 66.0
+offset_top = 81.0
+offset_right = 99.0
+offset_bottom = 97.0
+focus_next = NodePath("../Mines")
+focus_previous = NodePath("../Height")
+theme = ExtResource("3_e55of")
+text = "99999"
+
+[node name="Height" parent="." instance=ExtResource("2_eebrp")]
+layout_mode = 0
+offset_left = 66.0
+offset_top = 57.0
+offset_right = 99.0
+offset_bottom = 73.0
+focus_next = NodePath("../Width")
+theme = ExtResource("3_e55of")
+text = "99999"
+
+[node name="Mines" parent="." instance=ExtResource("2_eebrp")]
+layout_mode = 0
+offset_left = 66.0
+offset_top = 105.0
+offset_right = 99.0
+offset_bottom = 121.0
+focus_next = NodePath("../OK")
+focus_previous = NodePath("../Width")
+theme = ExtResource("3_e55of")
+text = "99999"
+
+[node name="OK" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 123.0
+offset_top = 55.0
+offset_right = 183.0
+offset_bottom = 81.0
+focus_next = NodePath("../Cancel")
+focus_previous = NodePath("../Mines")
+texture_normal = ExtResource("4_uwt4d")
+texture_pressed = ExtResource("5_oaueb")
+texture_focused = ExtResource("6_rceo3")
+
+[node name="Cancel" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 123.0
+offset_top = 97.0
+offset_right = 183.0
+offset_bottom = 123.0
+focus_next = NodePath("../Height")
+focus_previous = NodePath("../OK")
+texture_normal = ExtResource("7_a60wm")
+texture_pressed = ExtResource("8_y10hy")
+texture_focused = ExtResource("6_rceo3")
+
+[node name="X" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 180.0
+offset_top = 5.0
+offset_right = 196.0
+offset_bottom = 19.0
+texture_normal = ExtResource("9_3gjld")
+texture_pressed = ExtResource("10_k61nw")
+
+[node name="?" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 162.0
+offset_top = 5.0
+offset_right = 178.0
+offset_bottom = 19.0
+texture_normal = ExtResource("12_ugq2f")
+texture_pressed = ExtResource("13_opfcr")
+
+[node name="AcceptDialog" type="AcceptDialog" parent="."]
+mode = 2
+title = ""
+size = Vector2i(205, 100)
+ok_button_text = "Achievement Get!"
+dialog_text = "You have unlocked FULLY CUSTOM minesweeper games"
+dialog_autowrap = true
+
+[connection signal="gui_input" from="Width" to="Width" method="_on_gui_input"]
+[connection signal="gui_input" from="Height" to="Height" method="_on_gui_input"]
+[connection signal="gui_input" from="Mines" to="Mines" method="_on_gui_input"]
+[connection signal="pressed" from="OK" to="." method="_on_ok_pressed"]
+[connection signal="pressed" from="Cancel" to="." method="_on_cancel_pressed"]
+[connection signal="pressed" from="X" to="." method="_on_cancel_pressed"]
+[connection signal="pressed" from="?" to="." method="_on_question_pressed"]

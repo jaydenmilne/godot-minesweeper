@@ -33,7 +33,13 @@ sources/0 = SubResource("TileSetAtlasSource_cwamf")
 
 [node name="Minesweeper" type="Control"]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -342.0
+offset_bottom = -261.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_7x103")
 
 [node name="Window" type="NinePatchRect" parent="."]
@@ -109,10 +115,17 @@ layer_1/tile_data = PackedInt32Array()
 layout_mode = 1
 offset_left = 2.0
 offset_top = 22.0
-offset_right = 2.0
-offset_bottom = 22.0
+offset_right = -2.0
+offset_bottom = -211.0
 
 [node name="Sound" type="AudioStreamPlayer2D" parent="."]
+
+[node name="TitleBar" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 23.0
+offset_top = 3.0
+offset_right = 115.0
+offset_bottom = 21.0
 
 [connection signal="pressed" from="Window/MarginContainer/Bar/FaceButtonFrame/FaceButton" to="." method="_on_face_button_pressed"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
@@ -121,3 +134,4 @@ offset_bottom = 22.0
 [connection signal="marks_enabled_changed" from="MenuBar" to="." method="_on_menu_bar_marks_enabled_changed"]
 [connection signal="new_game" from="MenuBar" to="." method="_on_menu_bar_new_game"]
 [connection signal="sound_enabled_changed" from="MenuBar" to="." method="_on_menu_bar_sound_enabled_changed"]
+[connection signal="gui_input" from="TitleBar" to="." method="_on_title_bar_gui_input"]

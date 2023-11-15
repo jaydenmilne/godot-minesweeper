@@ -11,16 +11,19 @@ config_version=5
 [application]
 
 config/name="Godot-minesweeper"
-run/main_scene="res://minesweeper.tscn"
-config/features=PackedStringArray("4.0", "GL Compatibility")
+run/main_scene="res://desktop.tscn"
+config/features=PackedStringArray("4.1", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [display]
 
 window/size/viewport_width=512
 window/size/viewport_height=512
-window/stretch/mode="viewport"
-window/stretch/aspect="expand"
+
+[gui]
+
+fonts/dynamic_fonts/use_oversampling=false
+theme/custom="res://gui/theme_system.tres"
 
 [rendering]
 

@@ -1,6 +1,6 @@
 extends Control
 
-# state variables
+## STATE VARIABLES
 var time: int = 0
 var mines_remaining: int = 10
 var current_state: GameState = GameState.READY_TO_START
@@ -22,6 +22,7 @@ var clicking = false
 """Game allows you to click and drag and the cells are updated as you move. This
 is used to emulate that"""
 
+## CONSTANT VALUES
 # atlas indexes for cells
 const BLANK = Vector2i(0, 0)
 const FLAG = Vector2i(0, 1)
@@ -60,7 +61,7 @@ const FLAG_REVEALED = 128
 
 
 enum GameState {
-	READY_TO_START, # kind of a weird state, there is game board and stuff, but the clock is not running
+	READY_TO_START,
 	GAME_RUNNING,
 	GAME_OVER_LOST,
 	GAME_OVER_WON
@@ -71,13 +72,12 @@ func set_window_size():
 	smarter with godot layout stuff"""
 	
 	# magic numbers!
-	# 
-	var top_height = 96
-	var left_margin = 15
-	var right_margin = 11
-	var bottom_margin =  11
+	const top_height = 96
+	const left_margin = 15
+	const right_margin = 11
+	const bottom_margin =  11
 	
-	var grid_cell_size = 16
+	const grid_cell_size = 16
 	
 	var width = left_margin + right_margin + grid_cell_size * grid_width
 	var height = top_height + bottom_margin	+ grid_cell_size * grid_height
@@ -166,7 +166,6 @@ func update_mine_count(new_count: int) -> void:
 
 func right_click_cell(location: Vector2i):
 	var type = get_cell_type(location)
-	print(cell_data[location.y][location.x])
 	
 	if type == BLANK:
 		$Grid.set_cell(0, location, 0, FLAG, 0)
@@ -183,11 +182,9 @@ func right_click_cell(location: Vector2i):
 	elif type == QUESTION:
 		cell_data[location.y][location.x] &= ~FLAG_QUESTION
 		$Grid.set_cell(0, location, 0, BLANK, 0)
-	print(cell_data[location.y][location.x])
 	
 
 func click_cell(location: Vector2i) -> void:
-	print(location)
 	var cell = cell_data[location.y][location.x]
 	
 	if cell & FLAG_REVEALED:
@@ -279,7 +276,7 @@ func _gui_input(event) -> void:
 				clicking = true
 			else:
 				# mouseup
-				var click_grid_location = global2grid(event.position)
+				var click_grid_location = global2grid(event.global_position)
 				if loc_in_grid(click_grid_location):
 					if clicking and current_state == GameState.READY_TO_START:
 						change_game_state(GameState.GAME_RUNNING)
@@ -324,10 +321,8 @@ func prepare_board() -> void:
 		for x in range(grid_width):
 			$Grid.set_cell(0, Vector2i(x, y), 0, BLANK, 0)
 
-	print(len(cell_data), len(cell_data[0]))
 	var rng = RandomNumberGenerator.new()
 	rng.seed = 420
-	
 	# place mines
 	
 	for i in range(total_mines):
@@ -357,7 +352,7 @@ func prepare_board() -> void:
 				if cell_data[j][i] & FLAG_MINE:
 					sum += 1
 		return sum
-	print(len(cell_data), len(cell_data[0]))
+		
 	for y in range(grid_height):
 		for x in range(grid_width):
 			if not(cell_data[y][x] & FLAG_MINE):
@@ -399,7 +394,7 @@ func start_game():
 func _process(delta):
 	if clicking:
 		$Grid.clear_layer(1)
-		var grid_loc = global2grid(get_viewport().get_mouse_position())
+		var grid_loc = global2grid(self.get_global_mouse_position())
 		if loc_in_grid(grid_loc):
 			var clicked_cell_type = get_cell_type(grid_loc)
 			var set_cell = func(type):
@@ -443,3 +438,15 @@ func _on_menu_bar_color_enabled_changed(new_state):
 
 func _on_menu_bar_sound_enabled_changed(new_state):
 	enable_sound = new_state
+
+var dragpoint = null
+
+func _on_title_bar_gui_input(event: InputEvent):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			self.dragpoint = self.get_global_mouse_position() - self.get_screen_position()
+		else:
+			dragpoint = null
+	
+	if event is InputEventMouseMotion and dragpoint != null:
+		self.set_global_position(self.get_global_mouse_position() - dragpoint)

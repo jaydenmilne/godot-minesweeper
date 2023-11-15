@@ -22,23 +22,19 @@ signal color_enabled_changed(new_state: bool)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	update_difficulty(GameDifficulty.BEGINNER)
+	self.update_difficulty(self.GameDifficulty.BEGINNER)
 	
-	$GameMenu/ColorButton.update_checked(color_enabled)
-	color_enabled_changed.emit(color_enabled)
+	$GameMenu/ColorButton.update_checked(self.color_enabled)
+	self.color_enabled_changed.emit(self.color_enabled)
 	
-	$GameMenu/MarksButton.update_checked(marks_enabled)
-	marks_enabled_changed.emit(marks_enabled)
+	$GameMenu/MarksButton.update_checked(self.marks_enabled)
+	self.marks_enabled_changed.emit(self.marks_enabled)
 
-	$GameMenu/SoundButton.update_checked(sound_enabled)
-	sound_enabled_changed.emit(sound_enabled)
+	$GameMenu/SoundButton.update_checked(self.sound_enabled)
+	self.sound_enabled_changed.emit(self.sound_enabled)
 	
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
-
-var menus_activated = true
+var menus_activated = false
 """If menus are activated, then we get special behavior, namely:
 	
 	1. Hovering over the other menu button will activate that menu & deactivate
@@ -46,7 +42,7 @@ var menus_activated = true
 	2. Clicking anywhere else outside the menu will dismiss the menus """
 
 func show_game_menu():
-	menus_activated = true
+	self.menus_activated = true
 	$ClickOutsideMenuDetectorHack.set_process(true)
 	$ClickOutsideMenuDetectorHack.visible = true	
 	$GameMenu.visible = true
@@ -54,7 +50,7 @@ func show_game_menu():
 	$GameButton.grab_focus()
 	
 func show_help_menu():
-	menus_activated = true
+	self.menus_activated = true
 	$ClickOutsideMenuDetectorHack.set_process(true)
 	$ClickOutsideMenuDetectorHack.visible = true
 	$HelpMenu.visible = true
@@ -66,33 +62,33 @@ func hide_menus():
 	$ClickOutsideMenuDetectorHack.visible = false
 	$GameButton.release_focus()
 	$HelpButton.release_focus()
-	menus_activated = false
+	self.menus_activated = false
 	$GameMenu.visible = false
 	$HelpMenu.visible = false
 
 func _on_game_button_button_down():
-	if menus_activated:
-		hide_menus()
+	if self.menus_activated:
+		self.hide_menus()
 		return
-	show_game_menu()
+	self.show_game_menu()
 
 func _on_help_button_button_down():
-	if menus_activated:
-		hide_menus()
+	if self.menus_activated:
+		self.hide_menus()
 		return
-	return	show_help_menu()
+	return self.show_help_menu()
 
 func _on_game_button_mouse_entered():
-	if menus_activated:
-		show_game_menu()
+	if self.menus_activated:
+		self.show_game_menu()
 
 func _on_help_button_mouse_entered():
-	if menus_activated:
-		show_help_menu()
+	if self.menus_activated:
+		self.show_help_menu()
 
 func _on_click_outside_menu_detector_hack_gui_input(event):
-	if (event is InputEventMouseButton) and event.is_pressed() and menus_activated:
-		hide_menus()
+	if (event is InputEventMouseButton) and event.is_pressed() and self.menus_activated:
+		self.hide_menus()
 
 
 func _on_new_button_pressed():
@@ -111,65 +107,66 @@ func update_difficulty(new_difficulty: GameDifficulty):
 			$GameMenu/IntermediateButton.update_checked(false)
 			$GameMenu/ExpertButton.update_checked(false)
 			$GameMenu/CustomButton.update_checked(false)
-			change_difficulty.emit(9, 9, 10)
+			self.change_difficulty.emit(9, 9, 10)
 			
 		GameDifficulty.INTERMEDIATE:
 			$GameMenu/BeginnerButton.update_checked(false)
 			$GameMenu/IntermediateButton.update_checked(true)
 			$GameMenu/ExpertButton.update_checked(false)
 			$GameMenu/CustomButton.update_checked(false)
-			change_difficulty.emit(16, 16, 40)
+			self.change_difficulty.emit(16, 16, 40)
 			
 		GameDifficulty.EXPERT:
 			$GameMenu/BeginnerButton.update_checked(false)
 			$GameMenu/IntermediateButton.update_checked(false)
 			$GameMenu/ExpertButton.update_checked(true)
 			$GameMenu/CustomButton.update_checked(false)
-			change_difficulty.emit(30, 16, 99)
+			self.change_difficulty.emit(30, 16, 99)
 			
 		GameDifficulty.CUSTOM:
 			$GameMenu/BeginnerButton.update_checked(false)
 			$GameMenu/IntermediateButton.update_checked(false)
 			$GameMenu/ExpertButton.update_checked(false)
 			$GameMenu/CustomButton.update_checked(true)
-			change_difficulty.emit(4, 4, 1)
-			
+
 
 
 func _on_beginner_button_pressed():
-	hide_menus()
-	update_difficulty(GameDifficulty.BEGINNER)
+	self.hide_menus()
+	self.update_difficulty(self.GameDifficulty.BEGINNER)
 
 func _on_intermediate_button_pressed():
-	hide_menus()
-	update_difficulty(GameDifficulty.INTERMEDIATE)
+	self.hide_menus()
+	self.update_difficulty(self.GameDifficulty.INTERMEDIATE)
 
 
 func _on_expert_button_pressed():
-	hide_menus()
-	update_difficulty(GameDifficulty.EXPERT)
+	self.hide_menus()
+	self.update_difficulty(self.GameDifficulty.EXPERT)
 
 
 func _on_custom_button_pressed():
-	hide_menus()
-	update_difficulty(GameDifficulty.CUSTOM)
-	# todo: dialog and stuff
+	self.hide_menus()
+	$CustomModal.visible = true
 
 func _on_marks_button_pressed():
-	hide_menus()
-	marks_enabled = not marks_enabled
-	marks_enabled_changed.emit(marks_enabled)
-	$GameMenu/MarksButton.update_checked(marks_enabled)
+	self.hide_menus()
+	self.marks_enabled = not self.marks_enabled
+	self.marks_enabled_changed.emit(self.marks_enabled)
+	$GameMenu/MarksButton.update_checked(self.marks_enabled)
 
 func _on_color_button_pressed():
-	hide_menus()
-	color_enabled = not color_enabled
-	color_enabled_changed.emit(color_enabled)
-	$GameMenu/ColorButton.update_checked(color_enabled)
+	self.hide_menus()
+	self.color_enabled = not self.color_enabled
+	self.color_enabled_changed.emit(self.color_enabled)
+	$GameMenu/ColorButton.update_checked(self.color_enabled)
 
 func _on_sound_button_pressed():
-	hide_menus()
-	sound_enabled = not sound_enabled
-	sound_enabled_changed.emit(sound_enabled)
-	$GameMenu/SoundButton.update_checked(sound_enabled)
+	self.hide_menus()
+	self.sound_enabled = not self.sound_enabled
+	self.sound_enabled_changed.emit(self.sound_enabled)
+	$GameMenu/SoundButton.update_checked(self.sound_enabled)
 
+func _on_custom_modal_change_difficulty(width: int, height: int, num_mines: int):
+	self.update_difficulty(self.GameDifficulty.CUSTOM)
+	self.change_difficulty.emit(width, height, num_mines)

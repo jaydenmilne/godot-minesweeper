@@ -3,7 +3,6 @@ extends TextureRect
 signal change_value(value: String)
 
 func set_value(value: String):
-	assert(len(value) == 3, "this is supposed to be 3 chars long dum dum")
 	$First.texture = lookup[value[0]]
 	$Second.texture = lookup[value[1]]
 	$Third.texture = lookup[value[2]]
@@ -27,7 +26,7 @@ var lookup = {
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	set_value("9- ")
+	self.set_value("9- ")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -36,4 +35,4 @@ func _process(delta):
 
 
 func _on_change_value(value: String):
-	set_value(value)
+	self.set_value(value)

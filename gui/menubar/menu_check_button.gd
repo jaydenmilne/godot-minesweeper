@@ -8,24 +8,24 @@ const check: Resource = preload("res://gui/menubar/check_normal.png")
 const hover: Resource = preload("res://gui/menubar/check_hover.png")
 
 func update_checked(new_checked: bool):
-	checked = new_checked
-	if checked:
-		if hovering:
-			$check.texture = hover
+	self.checked = new_checked
+	if self.checked:
+		if self.hovering:
+			$check.texture = self.hover
 		else:
-			$check.texture = check
+			$check.texture = self.check
 	else:
 		$check.texture = null 
 
 func on_mouseenter():
-	hovering = true
-	update_checked(checked)
+	self.hovering = true
+	update_checked(self.checked)
 
 func on_mouseleave():
-	hovering = false
-	update_checked(checked)
+	self.hovering = false
+	update_checked(self.checked)
 
 func _on_visibility_changed():
-	if visible:
-		hovering = false
-		update_checked(checked)
+	if self.visible:
+		self.hovering = false
+		update_checked(self.checked)
