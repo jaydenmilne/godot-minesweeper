@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cvoiy5pk06wqi"]
+[gd_scene load_steps=14 format=3 uid="uid://cvoiy5pk06wqi"]
 
 [ext_resource type="Script" path="res://minesweeper.gd" id="1_7x103"]
 [ext_resource type="Texture2D" uid="uid://ccqqlic3sl2hv" path="res://bitmap/9patch.png" id="2_crupm"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bfosekfknaxt6" path="res://bitmap/face/face_pressed.tres" id="5_q6t5u"]
 [ext_resource type="Texture2D" uid="uid://bisxb31ivom1r" path="res://bitmap/410.bmp" id="6_o3s8q"]
 [ext_resource type="PackedScene" uid="uid://dexhilxkt3sfx" path="res://gui/menubar/menu_bar.tscn" id="8_kg1x7"]
+[ext_resource type="PackedScene" uid="uid://dfye7os5krgij" path="res://gui/title_bar_drag_zone.tscn" id="8_sl2cy"]
 
 [sub_resource type="Gradient" id="Gradient_uateg"]
 colors = PackedColorArray(0.0509804, 0.152941, 0.423529, 1, 0.65098, 0.792157, 0.941176, 1)
@@ -71,6 +72,8 @@ size_flags_horizontal = 3
 texture = SubResource("GradientTexture2D_0koes")
 expand_mode = 2
 
+[node name="Timer" type="Timer" parent="."]
+
 [node name="Window" type="NinePatchRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -128,8 +131,6 @@ texture_pressed = ExtResource("5_q6t5u")
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="Timer" type="Timer" parent="."]
-
 [node name="Grid" type="TileMap" parent="."]
 position = Vector2(15, 96)
 tile_set = SubResource("TileSet_4dftg")
@@ -142,16 +143,6 @@ layer_1/y_sort_enabled = false
 layer_1/y_sort_origin = 0
 layer_1/z_index = 0
 layer_1/tile_data = PackedInt32Array()
-
-[node name="MenuBar" parent="." instance=ExtResource("8_kg1x7")]
-layout_mode = 1
-anchors_preset = 10
-anchor_bottom = 0.0
-offset_left = 4.0
-offset_top = 22.0
-offset_right = 4.0
-offset_bottom = 22.0
-grow_vertical = 1
 
 [node name="Sound" type="AudioStreamPlayer2D" parent="."]
 
@@ -169,15 +160,24 @@ theme_override_constants/margin_right = 55
 layout_mode = 2
 alignment = 1
 
-[node name="TitleBarDragZone" type="Control" parent="MarginContainer3/HBoxContainer"]
+[node name="TitleBarDragZone" parent="MarginContainer3/HBoxContainer" instance=ExtResource("8_sl2cy")]
 layout_mode = 2
-size_flags_horizontal = 3
 
-[connection signal="pressed" from="Window/MarginContainer/Bar/FaceButtonFrame/FaceButton" to="." method="_on_face_button_pressed"]
+[node name="MenuBar" parent="." instance=ExtResource("8_kg1x7")]
+layout_mode = 1
+anchors_preset = 10
+anchor_bottom = 0.0
+offset_left = 4.0
+offset_top = 22.0
+offset_right = 4.0
+offset_bottom = 22.0
+grow_vertical = 1
+
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="pressed" from="Window/MarginContainer/Bar/FaceButtonFrame/FaceButton" to="." method="_on_face_button_pressed"]
+[connection signal="update_window_position" from="MarginContainer3/HBoxContainer/TitleBarDragZone" to="." method="_on_title_bar_drag_zone_update_window_position"]
 [connection signal="change_difficulty" from="MenuBar" to="." method="_on_menu_bar_change_difficulty"]
 [connection signal="color_enabled_changed" from="MenuBar" to="." method="_on_menu_bar_color_enabled_changed"]
 [connection signal="marks_enabled_changed" from="MenuBar" to="." method="_on_menu_bar_marks_enabled_changed"]
 [connection signal="new_game" from="MenuBar" to="." method="_on_menu_bar_new_game"]
 [connection signal="sound_enabled_changed" from="MenuBar" to="." method="_on_menu_bar_sound_enabled_changed"]
-[connection signal="gui_input" from="MarginContainer3/HBoxContainer/TitleBarDragZone" to="." method="_on_title_bar_gui_input"]

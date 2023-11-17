@@ -1,10 +1,13 @@
-extends TextureRect
+extends Control
 
 signal change_difficulty(width: int, height: int, num_mines: int)
 
 var max_width = 30
 var max_height = 24
 var fully_unlimited = false
+
+func _ready():
+	$TitleBarDragZone.get_screen_position = self.get_screen_position
 
 func _on_ok_pressed():
 	self.visible = false
@@ -35,3 +38,28 @@ func _on_question_pressed():
 	self.max_height = 99999
 	self.max_width = 99999
 	self.fully_unlimited = true
+
+const ANGRY_DING: Resource = preload("res://gui/custommodal/ding.wav")
+
+func _on_another_dirty_focus_hack_gui_input(event):
+	if event is InputEventMouseButton and event.pressed:
+		# blink and ding angrily
+		$AnimationPlayer.stop()
+		$AnimationPlayer.play('blink')
+
+func _on_x_pressed():
+	pass # Replace with function body.
+
+
+func _on_animation_player_animation_finished(anim_name):
+	# this seems to be played when the blinking is done, not when it starts
+	$Sound.stream = ANGRY_DING
+	$Sound.play()
+
+
+func _on_title_bar_drag_zone_gui_input(event):
+	pass # Replace with function body.
+
+
+func _on_title_bar_drag_zone_update_window_position(pos):
+	self.set_global_position(pos)

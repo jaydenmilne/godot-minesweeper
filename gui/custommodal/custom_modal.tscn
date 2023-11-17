@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://ds0vch7nlj15y"]
+[gd_scene load_steps=21 format=3 uid="uid://ds0vch7nlj15y"]
 
 [ext_resource type="Texture2D" uid="uid://b88slcg3c60ov" path="res://gui/custommodal/custom_modal.png" id="1_wl1il"]
 [ext_resource type="Script" path="res://gui/custommodal/custom_modal.gd" id="2_6afgk"]
@@ -13,17 +13,75 @@
 [ext_resource type="Texture2D" uid="uid://d1031tc4bnpjf" path="res://gui/close/x_pressed.png" id="10_k61nw"]
 [ext_resource type="Texture2D" uid="uid://bgaxmgrbglx2q" path="res://gui/custommodal/cancel/question.png" id="12_ugq2f"]
 [ext_resource type="Texture2D" uid="uid://snhcbr6vkkl1" path="res://gui/custommodal/cancel/question_pressed.png" id="13_opfcr"]
+[ext_resource type="Texture2D" uid="uid://bmv6undbpn6iv" path="res://gui/custommodal/custom_modal_disabled.png" id="14_ll74o"]
+[ext_resource type="FontFile" uid="uid://c2uvocnvi5xya" path="res://gui/system.ttf" id="14_odir8"]
+[ext_resource type="PackedScene" uid="uid://dfye7os5krgij" path="res://gui/title_bar_drag_zone.tscn" id="16_naxfe"]
 
-[node name="CustomModal" type="TextureRect"]
+[sub_resource type="Theme" id="Theme_c5c8o"]
+default_font = ExtResource("14_odir8")
+
+[sub_resource type="Animation" id="Animation_2p57e"]
+resource_name = "blink"
+length = 0.3663
+step = 0.0333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0999, 0.1665, 0.1998, 0.2997, 0.3663),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("14_ll74o"), ExtResource("1_wl1il"), ExtResource("14_ll74o"), ExtResource("1_wl1il"), ExtResource("14_ll74o"), ExtResource("1_wl1il")]
+}
+
+[sub_resource type="Animation" id="Animation_dlj41"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [ExtResource("1_wl1il")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6liqw"]
+_data = {
+"RESET": SubResource("Animation_dlj41"),
+"blink": SubResource("Animation_2p57e")
+}
+
+[node name="Control" type="Control"]
+custom_minimum_size = Vector2(201, 163)
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -311.0
-offset_bottom = -349.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_wl1il")
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("2_6afgk")
+
+[node name="AnotherDirtyFocusHack" type="Control" parent="."]
+anchors_preset = 0
+offset_left = -1960.0
+offset_top = -2054.0
+offset_right = 2136.0
+offset_bottom = 2042.0
+
+[node name="CustomModal" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 201.0
+offset_bottom = 163.0
+texture = ExtResource("14_ll74o")
 
 [node name="Width" parent="." instance=ExtResource("2_eebrp")]
 layout_mode = 0
@@ -103,14 +161,33 @@ texture_pressed = ExtResource("13_opfcr")
 mode = 2
 title = ""
 size = Vector2i(205, 100)
+theme = SubResource("Theme_c5c8o")
 ok_button_text = "Achievement Get!"
 dialog_text = "You have unlocked FULLY CUSTOM minesweeper games"
 dialog_autowrap = true
 
+[node name="Sound" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(-236, -236)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../CustomModal")
+libraries = {
+"": SubResource("AnimationLibrary_6liqw")
+}
+
+[node name="TitleBarDragZone" parent="." instance=ExtResource("16_naxfe")]
+offset_left = 23.0
+offset_top = 3.0
+offset_right = 162.0
+offset_bottom = 21.0
+
+[connection signal="gui_input" from="AnotherDirtyFocusHack" to="." method="_on_another_dirty_focus_hack_gui_input"]
 [connection signal="gui_input" from="Width" to="Width" method="_on_gui_input"]
 [connection signal="gui_input" from="Height" to="Height" method="_on_gui_input"]
 [connection signal="gui_input" from="Mines" to="Mines" method="_on_gui_input"]
 [connection signal="pressed" from="OK" to="." method="_on_ok_pressed"]
 [connection signal="pressed" from="Cancel" to="." method="_on_cancel_pressed"]
-[connection signal="pressed" from="X" to="." method="_on_cancel_pressed"]
+[connection signal="pressed" from="X" to="." method="_on_x_pressed"]
 [connection signal="pressed" from="?" to="." method="_on_question_pressed"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
+[connection signal="update_window_position" from="TitleBarDragZone" to="." method="_on_title_bar_drag_zone_update_window_position"]

@@ -33,6 +33,13 @@ texture_normal = ExtResource("3_0bho1")
 texture_pressed = ExtResource("2_k3kfl")
 
 [node name="Minesweeper" parent="." instance=ExtResource("2_vo583")]
-layout_mode = 1
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_right = 170.0
+offset_bottom = 271.0
+grow_horizontal = 1
+grow_vertical = 1
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Magnifier" to="." method="_on_magnifier_pressed"]

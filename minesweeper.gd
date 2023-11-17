@@ -39,8 +39,8 @@ const FACE_DEAD: Resource = preload("res://bitmap/face/face_dead.tres")
 const FACE_COOL: Resource = preload("res://bitmap/face/face_cool.tres")
 
 const SOUND_CLOCK: Resource = preload("res://sound/432.wav")
-const SOUND_WIN: Resource = preload("res://sound/434.wav")
-const SOUND_KABOOM: Resource = preload("res://sound/433.wav")
+const SOUND_WIN: Resource = preload("res://sound/433.wav")
+const SOUND_KABOOM: Resource = preload("res://sound/434.wav")
 
 const NUMBER_LOOKUP = {
 	1: Vector2i(0, 14),
@@ -127,7 +127,7 @@ func change_game_state(new_state: GameState):
 				GameState.READY_TO_START:
 					reset_game()
 				GameState.GAME_OVER_WON:
-					game_over_lost.call()
+					game_over_won.call()
 				_:
 					assert(false, "unexpected transition GAME_RUNNING -> %s" % GameState.keys()[new_state])
 		GameState.GAME_OVER_LOST, GameState.GAME_OVER_WON:
@@ -185,6 +185,7 @@ func right_click_cell(location: Vector2i):
 	
 
 func click_cell(location: Vector2i) -> void:
+	print("click at %v" % location)
 	var cell = cell_data[location.y][location.x]
 	
 	if cell & FLAG_REVEALED:
@@ -269,7 +270,7 @@ func _gui_input(event) -> void:
 		if current_state not in [GameState.GAME_RUNNING, GameState.READY_TO_START]:
 			return
 		if event.button_index == MOUSE_BUTTON_LEFT:
-			if event.pressed:
+			if event.pressed and event.position.y >= 40:
 				# always set face to shocked, the game does this for some reason
 				# TODO: not if its in the menu bar
 				set_face(FACE_OOOOOO)
@@ -291,7 +292,7 @@ func _gui_input(event) -> void:
 					
 				set_face(face_texture)
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-			var location = global2grid(event.position)
+			var location = global2grid(event.global_position)
 			if loc_in_grid(location):
 				right_click_cell(location)
 
@@ -371,6 +372,8 @@ func _ready():
 	
 	prepare_board()
 	set_window_size()
+	
+	$MarginContainer3/HBoxContainer/TitleBarDragZone.get_screen_position = self.get_screen_position
 
 func get_cell_type(grid_loc: Vector2i):
 	return $Grid.get_cell_atlas_coords(0, grid_loc)
@@ -439,14 +442,5 @@ func _on_menu_bar_color_enabled_changed(new_state):
 func _on_menu_bar_sound_enabled_changed(new_state):
 	enable_sound = new_state
 
-var dragpoint = null
-
-func _on_title_bar_gui_input(event: InputEvent):
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			self.dragpoint = self.get_global_mouse_position() - self.get_screen_position()
-		else:
-			dragpoint = null
-	
-	if event is InputEventMouseMotion and dragpoint != null:
-		self.set_global_position(self.get_global_mouse_position() - dragpoint)
+func _on_title_bar_drag_zone_update_window_position(pos: Vector2):
+	self.set_global_position(pos)

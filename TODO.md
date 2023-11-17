@@ -1,27 +1,28 @@
-TODO
+## TODO
 
 - Game Menu
   - Colors
   - Best Times
  - Exit
 - Help Menu
+- about modal
 - Cheat code
 - You win popup dialog thing -> fastest time dialog
 - You can't lose on your first click
 - Title bar dragging
 - Blind mode scaling
 - Non Color Mode
-- Canvas resizing (run at native resolution in browser)
-- secret no rules custom mode???
+- defaults for custom field modal
 
-Errata
-- Clicking on menu bar causes mouth to open
+### Errata
 - Face reacts to clicking anywhere in game instead of just within the window
-- It plays the wrong game over music??
+- ding animation isn't quite right
+- minesweeper window needs to defocus when custom is open
+- flags are ignored when clearing
 
-Done:
+## Done:
+- secret no rules custom mode???
 - Timer starts at one
-- Timer value is not reset
 - Implement winning
 - Fix top bar layout
 - Variable board sizing
@@ -31,8 +32,16 @@ Done:
  - Marks
  - Custom difficulty dialog
  - Sound
-
+- Canvas resizing (run at native resolution in browser)
 - Sound
+
+### Errata
+- minesweeper window resizes when you resize window
+- Timer value is not reset
+- right clicking is extremely screwed up after drag
+- question marks should be clickable
+- It plays the wrong game over music??
+- Clicking on menu bar causes mouth to open
 
 ## Devblog
 

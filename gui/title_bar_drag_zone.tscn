@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://dfye7os5krgij"]
+
+[ext_resource type="Script" path="res://gui/title_bar_drag_zone.gd" id="1_rn6er"]
+
+[node name="TitleBarDragZone" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+size_flags_horizontal = 3
+script = ExtResource("1_rn6er")
+
+[connection signal="gui_input" from="." to="." method="_on_title_bar_gui_input"]
