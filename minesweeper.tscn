@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cvoiy5pk06wqi"]
+[gd_scene load_steps=15 format=3 uid="uid://cvoiy5pk06wqi"]
 
 [ext_resource type="Script" path="res://minesweeper.gd" id="1_7x103"]
 [ext_resource type="Texture2D" uid="uid://ccqqlic3sl2hv" path="res://bitmap/9patch.png" id="2_crupm"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://bisxb31ivom1r" path="res://bitmap/410.bmp" id="6_o3s8q"]
 [ext_resource type="PackedScene" uid="uid://dexhilxkt3sfx" path="res://gui/menubar/menu_bar.tscn" id="8_kg1x7"]
 [ext_resource type="PackedScene" uid="uid://dfye7os5krgij" path="res://gui/title_bar_drag_zone.tscn" id="8_sl2cy"]
+[ext_resource type="PackedScene" uid="uid://bagb4oxjuitug" path="res://gui/highscore/fastest_time/fastest_time_modal.tscn" id="10_armt6"]
 
 [sub_resource type="Gradient" id="Gradient_uateg"]
 colors = PackedColorArray(0.0509804, 0.152941, 0.423529, 1, 0.65098, 0.792157, 0.941176, 1)
@@ -172,6 +173,16 @@ offset_top = 22.0
 offset_right = 4.0
 offset_bottom = 22.0
 grow_vertical = 1
+
+[node name="fastest_time_modal" parent="." instance=ExtResource("10_armt6")]
+visible = false
+layout_mode = 1
+anchor_right = 0.912
+anchor_bottom = 0.673
+offset_left = 3.0
+offset_top = 87.0
+offset_right = 2.95999
+offset_bottom = 87.077
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="pressed" from="Window/MarginContainer/Bar/FaceButtonFrame/FaceButton" to="." method="_on_face_button_pressed"]

@@ -13,6 +13,9 @@
 - Blind mode scaling
 - Non Color Mode
 - defaults for custom field modal
+- persist board and game state between tab reloads
+- stop clock cheat
+- main window needs to be disabled when modals are open
 
 ### Errata
 - Face reacts to clicking anywhere in game instead of just within the window
@@ -21,6 +24,7 @@
 - flags are ignored when clearing
 
 ## Done:
+- persist high scores
 - secret no rules custom mode???
 - Timer starts at one
 - Implement winning

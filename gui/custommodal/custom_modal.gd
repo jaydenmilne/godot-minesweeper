@@ -51,14 +51,10 @@ func _on_x_pressed():
 	pass # Replace with function body.
 
 
-func _on_animation_player_animation_finished(anim_name):
+func _on_animation_player_animation_finished(_anim_name):
 	# this seems to be played when the blinking is done, not when it starts
-	$Sound.stream = ANGRY_DING
+	$Sound.stream = self.ANGRY_DING
 	$Sound.play()
-
-
-func _on_title_bar_drag_zone_gui_input(event):
-	pass # Replace with function body.
 
 
 func _on_title_bar_drag_zone_update_window_position(pos):

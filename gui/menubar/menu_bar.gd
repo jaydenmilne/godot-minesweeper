@@ -1,19 +1,22 @@
 extends Control
 
+class_name menu_bar
+
 """I don't know why I'm doing this but here we go!!"""
 
 enum GameDifficulty {
-	BEGINNER,
-	INTERMEDIATE,
-	EXPERT,
-	CUSTOM
+	BEGINNER = 0,
+	INTERMEDIATE = 1,
+	EXPERT = 2,
+	CUSTOM = 3
 }
 
 var marks_enabled = true
 var sound_enabled = true
 var color_enabled = true
-"""If right clicking to question marks are allowed"""
+var difficulty: GameDifficulty = self.GameDifficulty.BEGINNER
 
+"""If right clicking to question marks are allowed"""
 signal new_game
 signal change_difficulty(width: int, height: int, num_mines: int)
 signal marks_enabled_changed(new_state: bool)
@@ -99,6 +102,7 @@ func _on_new_button_pressed():
 # a reusable menu entry component?
 
 func update_difficulty(new_difficulty: GameDifficulty):
+	self.difficulty = new_difficulty
 	# this is gross and I hate it. maybe I should've figured out how to use the
 	# built in radio group?
 	match new_difficulty:
@@ -128,8 +132,6 @@ func update_difficulty(new_difficulty: GameDifficulty):
 			$GameMenu/IntermediateButton.update_checked(false)
 			$GameMenu/ExpertButton.update_checked(false)
 			$GameMenu/CustomButton.update_checked(true)
-
-
 
 func _on_beginner_button_pressed():
 	self.hide_menus()

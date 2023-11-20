@@ -20,6 +20,21 @@
 [sub_resource type="Theme" id="Theme_c5c8o"]
 default_font = ExtResource("14_odir8")
 
+[sub_resource type="Animation" id="Animation_dlj41"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [ExtResource("1_wl1il")]
+}
+
 [sub_resource type="Animation" id="Animation_2p57e"]
 resource_name = "blink"
 length = 0.3663
@@ -35,21 +50,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [ExtResource("14_ll74o"), ExtResource("1_wl1il"), ExtResource("14_ll74o"), ExtResource("1_wl1il"), ExtResource("14_ll74o"), ExtResource("1_wl1il")]
-}
-
-[sub_resource type="Animation" id="Animation_dlj41"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [ExtResource("1_wl1il")]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_6liqw"]
@@ -81,7 +81,7 @@ offset_bottom = 2042.0
 layout_mode = 0
 offset_right = 201.0
 offset_bottom = 163.0
-texture = ExtResource("14_ll74o")
+texture = ExtResource("1_wl1il")
 
 [node name="Width" parent="." instance=ExtResource("2_eebrp")]
 layout_mode = 0
