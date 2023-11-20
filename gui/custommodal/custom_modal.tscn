@@ -1,9 +1,8 @@
-[gd_scene load_steps=21 format=3 uid="uid://ds0vch7nlj15y"]
+[gd_scene load_steps=19 format=3 uid="uid://ds0vch7nlj15y"]
 
 [ext_resource type="Texture2D" uid="uid://b88slcg3c60ov" path="res://gui/custommodal/custom_modal.png" id="1_wl1il"]
 [ext_resource type="Script" path="res://gui/custommodal/custom_modal.gd" id="2_6afgk"]
 [ext_resource type="PackedScene" uid="uid://8gngbugi63d7" path="res://gui/custommodal/numbox.tscn" id="2_eebrp"]
-[ext_resource type="Theme" uid="uid://c6p6p3413tfi6" path="res://gui/theme_system.tres" id="3_e55of"]
 [ext_resource type="Texture2D" uid="uid://vwa2f4v77l03" path="res://gui/custommodal/ok/ok.png" id="4_uwt4d"]
 [ext_resource type="Texture2D" uid="uid://dema30d8g2buj" path="res://gui/custommodal/ok/ok_pressed.png" id="5_oaueb"]
 [ext_resource type="Texture2D" uid="uid://db0c6eqdr2nmx" path="res://gui/custommodal/ok/ok_focus.png" id="6_rceo3"]
@@ -14,11 +13,8 @@
 [ext_resource type="Texture2D" uid="uid://bgaxmgrbglx2q" path="res://gui/custommodal/cancel/question.png" id="12_ugq2f"]
 [ext_resource type="Texture2D" uid="uid://snhcbr6vkkl1" path="res://gui/custommodal/cancel/question_pressed.png" id="13_opfcr"]
 [ext_resource type="Texture2D" uid="uid://bmv6undbpn6iv" path="res://gui/custommodal/custom_modal_disabled.png" id="14_ll74o"]
-[ext_resource type="FontFile" uid="uid://c2uvocnvi5xya" path="res://gui/system.ttf" id="14_odir8"]
+[ext_resource type="Theme" uid="uid://c6p6p3413tfi6" path="res://gui/theme_system.tres" id="14_qv1sw"]
 [ext_resource type="PackedScene" uid="uid://dfye7os5krgij" path="res://gui/title_bar_drag_zone.tscn" id="16_naxfe"]
-
-[sub_resource type="Theme" id="Theme_c5c8o"]
-default_font = ExtResource("14_odir8")
 
 [sub_resource type="Animation" id="Animation_dlj41"]
 length = 0.001
@@ -91,7 +87,7 @@ offset_right = 99.0
 offset_bottom = 97.0
 focus_next = NodePath("../Mines")
 focus_previous = NodePath("../Height")
-theme = ExtResource("3_e55of")
+theme = ExtResource("14_qv1sw")
 text = "99999"
 
 [node name="Height" parent="." instance=ExtResource("2_eebrp")]
@@ -101,7 +97,7 @@ offset_top = 57.0
 offset_right = 99.0
 offset_bottom = 73.0
 focus_next = NodePath("../Width")
-theme = ExtResource("3_e55of")
+theme = ExtResource("14_qv1sw")
 text = "99999"
 
 [node name="Mines" parent="." instance=ExtResource("2_eebrp")]
@@ -112,7 +108,7 @@ offset_right = 99.0
 offset_bottom = 121.0
 focus_next = NodePath("../OK")
 focus_previous = NodePath("../Width")
-theme = ExtResource("3_e55of")
+theme = ExtResource("14_qv1sw")
 text = "99999"
 
 [node name="OK" type="TextureButton" parent="."]
@@ -161,7 +157,7 @@ texture_pressed = ExtResource("13_opfcr")
 mode = 2
 title = ""
 size = Vector2i(205, 100)
-theme = SubResource("Theme_c5c8o")
+theme = ExtResource("14_qv1sw")
 ok_button_text = "Achievement Get!"
 dialog_text = "You have unlocked FULLY CUSTOM minesweeper games"
 dialog_autowrap = true

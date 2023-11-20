@@ -59,21 +59,6 @@ const FLAG_FLAG = 32
 const FLAG_QUESTION = 64
 const FLAG_REVEALED = 128
 
-const HIGHSCORES_FILE = "user://highscores.json"
-var DEFAULT_HIGHSCORES = {
-	menu_bar.GameDifficulty.keys()[(menu_bar.GameDifficulty.BEGINNER)]: {
-		"time": 999,
-		"name": "Anonymous"
-	},
-	menu_bar.GameDifficulty.keys()[(menu_bar.GameDifficulty.INTERMEDIATE)]: {
-		"time": 999,
-		"name": "Anonymous"
-	},
-	menu_bar.GameDifficulty.keys()[(menu_bar.GameDifficulty.EXPERT)]: {
-		"time": 999,
-		"name": "Anonymous"
-	}
-}
 
 enum GameState {
 	READY_TO_START,
@@ -102,49 +87,7 @@ func set_window_size():
 func set_face(res: Resource):
 	$Window/MarginContainer/Bar/FaceButtonFrame/FaceButton.texture_normal = res
 
-func save_highscores(highscores: Dictionary):
-	var highscores_text = JSON.stringify(highscores)
-		
-	var file = FileAccess.open(HIGHSCORES_FILE, FileAccess.WRITE)
-	file.store_string(highscores_text)
-	file = null
 
-func load_highscores() -> Dictionary:
-	var json = JSON.new()
-	
-	if not FileAccess.file_exists(self.HIGHSCORES_FILE):
-		# create them
-		save_highscores(self.DEFAULT_HIGHSCORES)
-		
-	assert(FileAccess.file_exists(self.HIGHSCORES_FILE), "highscores file doesn't exist but we probably tried to make it???")
-	var highscores = FileAccess.open(HIGHSCORES_FILE, FileAccess.READ).get_as_text()
-	var err = json.parse(highscores)
-	
-	if err:
-		print("failed to parse json! %s", json.get_error_message())
-		return DEFAULT_HIGHSCORES
-	
-	return json.data
-
-func store_score():
-	var high_scores = load_highscores()
-	var difficulty_name: String = menu_bar.GameDifficulty.keys()[$MenuBar.difficulty]
-	if high_scores[difficulty_name]["time"] <= self.time:
-		# not a high score
-		return
-		
-	# has a new high score, bring up the modal
-	print("has a new high score `%d` for difficulty `%s`" % [time, difficulty_name])
-	$fastest_time_modal.show_modal($MenuBar.difficulty)
-	
-	var new_name = await $fastest_time_modal.player_name
-	print("storing score `%d` for name `%s` on difficulty `%s`" % [self.time, new_name, difficulty_name])
-	high_scores[difficulty_name] = {
-		"time": time,
-		"name": new_name,
-	}
-	
-	self.save_highscores(high_scores)
 
 func change_game_state(new_state: GameState):
 	print("changing state %s -> %s" % [GameState.keys()[current_state], GameState.keys()[new_state]])
@@ -162,7 +105,9 @@ func change_game_state(new_state: GameState):
 		if enable_sound:
 			$Sound.stream = SOUND_WIN
 			$Sound.play()
-		store_score()
+		var new_name = await $fastest_time_modal.player_name
+		var save_manager = self.get_node("/root/SaveManager")
+		save_manager.store_score(self.time, $MenuBar.difficulty, new_name)
 			
 	match current_state:
 		GameState.READY_TO_START:
@@ -425,6 +370,7 @@ func prepare_board() -> void:
 	if DEBUG_SHOW_BOARD:
 		show_board()
 	
+	
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$Window/MarginContainer/Bar/MineCounter.change_value.emit("%03d" % mines_remaining)
@@ -434,6 +380,8 @@ func _ready():
 	set_window_size()
 	
 	$MarginContainer3/HBoxContainer/TitleBarDragZone.get_screen_position = self.get_screen_position
+		
+	
 
 func get_cell_type(grid_loc: Vector2i):
 	return $Grid.get_cell_atlas_coords(0, grid_loc)

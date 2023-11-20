@@ -27,7 +27,7 @@ func _on_ok_pressed():
 
 
 func _on_why_do_i_keep_doing_this_dirty_hack_gui_input(event):
-	if event is InputEventMouseButton and event.pressed and not $Sound.playing:
+	if event is InputEventMouseButton and event.pressed:
 		# ding angrily
 		$Sound.stream = DING
 		$Sound.play()

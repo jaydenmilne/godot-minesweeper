@@ -1,11 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://bagb4oxjuitug"]
+[gd_scene load_steps=6 format=3 uid="uid://bagb4oxjuitug"]
 
 [ext_resource type="Script" path="res://gui/highscore/fastest_time/fastest_time_modal.gd" id="1_ro4em"]
 [ext_resource type="Texture2D" uid="uid://by6si6laf3vhr" path="res://gui/highscore/fastest_time/fastest_time.png" id="1_xbfpl"]
 [ext_resource type="Texture2D" uid="uid://boekrwi71xsvu" path="res://gui/highscore/fastest_time/ok/fastest_ok.png" id="2_vdkuy"]
 [ext_resource type="Texture2D" uid="uid://catefplp7duo7" path="res://gui/highscore/fastest_time/ok/fastest_ok_pressed.png" id="3_owa2v"]
 [ext_resource type="Texture2D" uid="uid://vdxp2qhunw18" path="res://gui/highscore/fastest_time/ok/fastest_ok_highlight.png" id="4_uc4ie"]
-[ext_resource type="FontFile" uid="uid://c2uvocnvi5xya" path="res://gui/system.ttf" id="5_22kmq"]
 
 [node name="fastest_time_modal" type="Control"]
 layout_mode = 3
@@ -50,7 +49,6 @@ offset_bottom = 104.0
 focus_neighbor_bottom = NodePath("../OK")
 focus_next = NodePath("../OK")
 focus_previous = NodePath("../OK")
-theme_override_fonts/font = ExtResource("5_22kmq")
 text = "Anonymous"
 max_length = 32
 caret_blink = true

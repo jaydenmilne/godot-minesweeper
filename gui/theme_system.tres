@@ -1,6 +1,6 @@
 [gd_resource type="Theme" load_steps=5 format=3 uid="uid://c6p6p3413tfi6"]
 
-[ext_resource type="FontFile" uid="uid://dimn8ug8pbqyb" path="res://gui/ms_sans_serif.ttf" id="1_uinn1"]
+[ext_resource type="FontFile" uid="uid://c2yxt2rrf8ffu" path="res://gui/W95FA.otf" id="1_bmovi"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k6fv7"]
 bg_color = Color(1, 1, 1, 1)
@@ -9,14 +9,14 @@ bg_color = Color(1, 1, 1, 1)
 bg_color = Color(1, 1, 1, 1)
 
 [sub_resource type="FontVariation" id="FontVariation_4lxgd"]
-base_font = ExtResource("1_uinn1")
+base_font = ExtResource("1_bmovi")
 opentype_features = {
 1667329140: 0
 }
 
 [resource]
 default_font = SubResource("FontVariation_4lxgd")
-default_font_size = 16
+default_font_size = 13
 LineEdit/colors/caret_color = Color(0, 0, 0, 1)
 LineEdit/colors/font_color = Color(0, 0, 0, 1)
 LineEdit/colors/selection_color = Color(0.0392157, 0.141176, 0.415686, 1)

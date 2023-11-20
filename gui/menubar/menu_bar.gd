@@ -172,3 +172,8 @@ func _on_sound_button_pressed():
 func _on_custom_modal_change_difficulty(width: int, height: int, num_mines: int):
 	self.update_difficulty(self.GameDifficulty.CUSTOM)
 	self.change_difficulty.emit(width, height, num_mines)
+
+
+func _on_best_times_button_pressed():
+	self.hide_menus()
+	$fastest_minesweepers.show_scores()

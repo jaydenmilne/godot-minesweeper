@@ -15,6 +15,10 @@ run/main_scene="res://desktop.tscn"
 config/features=PackedStringArray("4.1", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+SaveManager="*res://save_manager.gd"
+
 [display]
 
 window/size/viewport_width=512
@@ -27,7 +31,7 @@ theme/custom="res://gui/theme_system.tres"
 
 [rendering]
 
-textures/canvas_textures/default_texture_filter=3
+textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="forward_plus"
 renderer/rendering_method.web="forward_plus"

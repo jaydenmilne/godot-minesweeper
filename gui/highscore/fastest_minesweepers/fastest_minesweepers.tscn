@@ -1,0 +1,191 @@
+[gd_scene load_steps=18 format=3 uid="uid://5dddejbf4b5x"]
+
+[ext_resource type="Script" path="res://gui/highscore/fastest_minesweepers/fastest_minesweepers.gd" id="1_a70r5"]
+[ext_resource type="Texture2D" uid="uid://crnvlj5nxxwbw" path="res://gui/highscore/fastest_minesweepers/fastest_mine_sweepers.png" id="1_pi01g"]
+[ext_resource type="Texture2D" uid="uid://csgmf3qb05qtn" path="res://gui/highscore/fastest_minesweepers/ok/fastest_mine_sweepers_ok.png" id="2_jqv16"]
+[ext_resource type="Texture2D" uid="uid://bmfsjyt760xjj" path="res://gui/highscore/fastest_minesweepers/fastest_mine_sweepers_disabled.png" id="3_0nbro"]
+[ext_resource type="Texture2D" uid="uid://dulrbfeykb836" path="res://gui/highscore/fastest_minesweepers/ok/fastest_mine_sweepers_ok_pressed.png" id="3_gd0yh"]
+[ext_resource type="Texture2D" uid="uid://d2ji1lc4e1xqu" path="res://gui/highscore/fastest_minesweepers/ok/fastest_mine_sweepers_ok_pressed_highlight.png" id="4_nsnse"]
+[ext_resource type="Texture2D" uid="uid://l10oxt5yg7yr" path="res://gui/highscore/fastest_minesweepers/reset/reset_scores_button.png" id="5_ak5cj"]
+[ext_resource type="Texture2D" uid="uid://bn0qor0cs2kc3" path="res://gui/highscore/fastest_minesweepers/reset/reset_scores_pressed.png" id="6_vrjdd"]
+[ext_resource type="Texture2D" uid="uid://bx0yisw7xykb4" path="res://gui/highscore/fastest_minesweepers/reset/reset_scores_focus.png" id="7_rbc2r"]
+[ext_resource type="Texture2D" uid="uid://ddrisd3030f5r" path="res://gui/close/x.png" id="8_m5g3l"]
+[ext_resource type="Texture2D" uid="uid://d1031tc4bnpjf" path="res://gui/close/x_pressed.png" id="9_ito6x"]
+[ext_resource type="Texture2D" uid="uid://bgaxmgrbglx2q" path="res://gui/custommodal/cancel/question.png" id="10_kuyll"]
+[ext_resource type="Texture2D" uid="uid://snhcbr6vkkl1" path="res://gui/custommodal/cancel/question_pressed.png" id="11_7kvyr"]
+[ext_resource type="Theme" uid="uid://c6p6p3413tfi6" path="res://gui/theme_system.tres" id="13_sgd4p"]
+[ext_resource type="PackedScene" uid="uid://dfye7os5krgij" path="res://gui/title_bar_drag_zone.tscn" id="14_b3y7t"]
+
+[sub_resource type="Animation" id="Animation_3g218"]
+resource_name = "blink"
+length = 0.3663
+step = 0.0333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ModalBody:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0999, 0.1665, 0.1998, 0.2997, 0.3663),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("3_0nbro"), ExtResource("1_pi01g"), ExtResource("3_0nbro"), ExtResource("1_pi01g"), ExtResource("3_0nbro"), ExtResource("1_pi01g")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_riuk2"]
+_data = {
+"blink": SubResource("Animation_3g218")
+}
+
+[node name="fastest_minesweepers" type="Control"]
+layout_mode = 3
+anchor_right = 0.51
+anchor_bottom = 0.287
+offset_right = -0.120026
+offset_bottom = 0.0559998
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_a70r5")
+
+[node name="FocusHack" type="Control" parent="."]
+anchors_preset = 0
+offset_left = -2048.0
+offset_top = -2048.0
+offset_right = 2048.0
+offset_bottom = 2048.0
+
+[node name="ModalBody" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.51
+anchor_bottom = 0.287
+offset_right = -221.12
+offset_bottom = -106.944
+texture = ExtResource("1_pi01g")
+
+[node name="OK" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 176.0
+offset_top = 111.0
+offset_right = 221.0
+offset_bottom = 131.0
+focus_neighbor_left = NodePath("../ResetScores")
+focus_next = NodePath("../ResetScores")
+focus_previous = NodePath("../ResetScores")
+texture_normal = ExtResource("2_jqv16")
+texture_pressed = ExtResource("3_gd0yh")
+texture_focused = ExtResource("4_nsnse")
+
+[node name="ResetScores" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 41.0
+offset_top = 111.0
+offset_right = 116.0
+offset_bottom = 131.0
+focus_neighbor_right = NodePath("../OK")
+focus_next = NodePath("../OK")
+focus_previous = NodePath("../OK")
+texture_normal = ExtResource("5_ak5cj")
+texture_pressed = ExtResource("6_vrjdd")
+texture_focused = ExtResource("7_rbc2r")
+
+[node name="X" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 240.0
+offset_top = 5.0
+offset_right = 256.0
+offset_bottom = 19.0
+texture_normal = ExtResource("8_m5g3l")
+texture_pressed = ExtResource("9_ito6x")
+
+[node name="Question" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 222.0
+offset_top = 5.0
+offset_right = 238.0
+offset_bottom = 19.0
+texture_normal = ExtResource("10_kuyll")
+texture_pressed = ExtResource("11_7kvyr")
+
+[node name="NoEasterEggs" type="AcceptDialog" parent="."]
+position = Vector2i(0, 36)
+size = Vector2i(149, 100)
+unresizable = true
+always_on_top = true
+theme = ExtResource("13_sgd4p")
+dialog_text = "Nope, no easter eggs here."
+
+[node name="BeginnerTime" type="Label" parent="."]
+layout_mode = 0
+offset_left = 93.0
+offset_top = 48.0
+offset_right = 155.0
+offset_bottom = 63.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "999 seconds"
+
+[node name="BeginnerName" type="Label" parent="."]
+layout_mode = 0
+offset_left = 168.0
+offset_top = 48.0
+offset_right = 247.0
+offset_bottom = 67.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Anonymous"
+
+[node name="IntermediateTime" type="Label" parent="."]
+layout_mode = 0
+offset_left = 93.0
+offset_top = 65.0
+offset_right = 170.0
+offset_bottom = 80.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "999 seconds"
+
+[node name="IntermediateName" type="Label" parent="."]
+layout_mode = 0
+offset_left = 168.0
+offset_top = 65.0
+offset_right = 247.0
+offset_bottom = 84.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Anonymous"
+
+[node name="ExpertTime" type="Label" parent="."]
+layout_mode = 0
+offset_left = 93.0
+offset_top = 81.0
+offset_right = 176.0
+offset_bottom = 96.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "999 seconds"
+
+[node name="ExpertName" type="Label" parent="."]
+layout_mode = 0
+offset_left = 168.0
+offset_top = 81.0
+offset_right = 247.0
+offset_bottom = 100.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Anonymous"
+
+[node name="Sound" type="AudioStreamPlayer2D" parent="."]
+
+[node name="TitleBarDragZone" parent="." instance=ExtResource("14_b3y7t")]
+offset_left = 23.0
+offset_top = 3.0
+offset_right = 222.0
+offset_bottom = 21.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_riuk2")
+}
+
+[connection signal="gui_input" from="FocusHack" to="." method="_on_focus_hack_gui_input"]
+[connection signal="pressed" from="OK" to="." method="_on_ok_pressed"]
+[connection signal="pressed" from="ResetScores" to="." method="_on_reset_scores_pressed"]
+[connection signal="pressed" from="X" to="." method="_on_ok_pressed"]
+[connection signal="pressed" from="Question" to="." method="_on_question_pressed"]
+[connection signal="update_window_position" from="TitleBarDragZone" to="." method="_on_title_bar_drag_zone_update_window_position"]
