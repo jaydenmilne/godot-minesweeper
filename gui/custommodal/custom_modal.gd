@@ -50,9 +50,5 @@ func _on_another_dirty_focus_hack_gui_input(event):
 		$Sound.stream = self.ANGRY_DING
 		$Sound.play()
 
-func _on_x_pressed():
-	pass # Replace with function body.
-
-
 func _on_title_bar_drag_zone_update_window_position(pos):
 	self.set_global_position(pos)

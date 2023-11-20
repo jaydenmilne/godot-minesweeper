@@ -146,8 +146,7 @@ func change_game_state(new_state: GameState):
 					update_mine_count(total_mines)
 					start_game()
 				GameState.READY_TO_START:
-					update_mine_count(total_mines)
-					start_game()
+					reset_game()
 				_:
 					assert(false, "unexpected transition GAME_OVER_LOST / GAME_OVER_WON -> %s" % GameState.keys()[new_state])
 		_:
@@ -193,8 +192,44 @@ func right_click_cell(location: Vector2i):
 		$Grid.set_cell(0, location, 0, BLANK, 0)
 	
 
+func handle_first_click_mine(location: Vector2i) -> void:
+	"""On the first click of the game, the player can't lose. If they click on
+	a mine, it is instead moved to the first available spot."""
+	var cell = cell_data[location.y][location.x]
+	if not cell & FLAG_MINE:
+		return
+	print("relocating mine - you're welcome")
+	# it's a mine, and we need to move it
+	# clear the mine flag where they clicked
+	self.cell_data[location.y][location.x] = 0
+	
+	var move_mine = func(): 
+		# move the mine to the first empty spot
+		for y in range(grid_height):
+			for x in range(grid_width):
+				if y == location.y and x == location.x:
+					# don't put it back where we started!
+					continue
+				if not(cell_data[y][x] & FLAG_MINE):
+					print("new mine is at (%d, %d)" % [x, y])
+					# clear any number flags & set the mine bit
+					cell_data[y][x] = FLAG_MINE
+					return
+		assert(false, "uhhh we didn't find a place to put this mine, is the board full?")
+	
+	# clear all the numbers, we're going to recreate them below
+	for y in range(grid_height):
+		for x in range(grid_width):
+			var data = cell_data[y][x]
+			cell_data[y][x] = (data | self.NUMBER_MASK) ^ self.NUMBER_MASK
+	
+	move_mine.call()
+	self.update_numbers()
+	
+	if DEBUG_SHOW_BOARD:
+		show_board()
+		
 func click_cell(location: Vector2i) -> void:
-	print("click at %v" % location)
 	var cell = cell_data[location.y][location.x]
 	
 	if cell & FLAG_REVEALED:
@@ -289,6 +324,8 @@ func _gui_input(event) -> void:
 				if loc_in_grid(click_grid_location):
 					if clicking and current_state == GameState.READY_TO_START:
 						change_game_state(GameState.GAME_RUNNING)
+						handle_first_click_mine(click_grid_location)
+						
 					click_cell(click_grid_location)
 				clicking = false
 				$Grid.clear_layer(1)
@@ -317,38 +354,7 @@ func show_board() -> void:
 			elif cell & FLAG_MINE and not cell & FLAG_FLAG:
 				$Grid.set_cell(0, Vector2i(x, y), 0, MINE, 0)
 
-
-func prepare_board() -> void:
-	cell_data = []
-	
-	# set visible area
-	for y in range(grid_height):
-		var new_row = []
-		new_row.resize(grid_width)
-		new_row.fill(0)
-		cell_data.append(new_row)
-		for x in range(grid_width):
-			$Grid.set_cell(0, Vector2i(x, y), 0, BLANK, 0)
-
-	var rng = RandomNumberGenerator.new()
-	rng.seed = 420
-	# place mines
-	
-	for i in range(total_mines):
-		var get_random_cell = func():
-			var x1 = rng.randi_range(0, grid_width - 1)
-			var y1 = rng.randi_range(0, grid_height - 1)
-			return Vector2i(x1, y1)
-			
-		var loc = get_random_cell.call()
-		
-		while cell_data[loc.y][loc.x] & FLAG_MINE:
-			loc = get_random_cell.call()
-		
-		cell_data[loc.y][loc.x] |= FLAG_MINE
-		
-	# compute number cells
-	
+func update_numbers() -> void:
 	var get_number = func(x: int, y: int) -> int:
 		"""Count the number of adjacent mines at x,y"""
 		var sum = 0
@@ -369,6 +375,43 @@ func prepare_board() -> void:
 				var mine_count = get_number.call(x, y)
 				assert(mine_count < 9)
 				cell_data[y][x] |= mine_count
+
+func prepare_board() -> void:
+	cell_data = []
+	
+	# set visible area
+	for y in range(grid_height):
+		var new_row = []
+		new_row.resize(grid_width)
+		new_row.fill(0)
+		cell_data.append(new_row)
+		for x in range(grid_width):
+			$Grid.set_cell(0, Vector2i(x, y), 0, BLANK, 0)
+
+	var rng = RandomNumberGenerator.new()
+	
+	# the actual minesweeper uses a 16 bit PRNG. In the same spirit, we restrict
+	# the seeds to 2^16 so that there are only that many boards. No, I'm not
+	# implementing board cycles and stuff
+	
+	rng.seed = rng.randi_range(0, 2**16)
+	
+	# place mines
+	for i in range(total_mines):
+		var get_random_cell = func():
+			var x1 = rng.randi_range(0, grid_width - 1)
+			var y1 = rng.randi_range(0, grid_height - 1)
+			return Vector2i(x1, y1)
+			
+		var loc = get_random_cell.call()
+		
+		while cell_data[loc.y][loc.x] & FLAG_MINE:
+			loc = get_random_cell.call()
+		
+		cell_data[loc.y][loc.x] |= FLAG_MINE
+		
+	# compute number cells
+	update_numbers()
 
 	if DEBUG_SHOW_BOARD:
 		show_board()

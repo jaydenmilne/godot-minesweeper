@@ -183,7 +183,7 @@ offset_bottom = 21.0
 [connection signal="gui_input" from="Mines" to="Mines" method="_on_gui_input"]
 [connection signal="pressed" from="OK" to="." method="_on_ok_pressed"]
 [connection signal="pressed" from="Cancel" to="." method="_on_cancel_pressed"]
-[connection signal="pressed" from="X" to="." method="_on_x_pressed"]
+[connection signal="pressed" from="X" to="." method="_on_cancel_pressed"]
 [connection signal="pressed" from="?" to="." method="_on_question_pressed"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="update_window_position" from="TitleBarDragZone" to="." method="_on_title_bar_drag_zone_update_window_position"]

@@ -5,7 +5,6 @@
  - Exit
 - Help Menu
 - about modal
-- You can't lose on your first click
 - Non Color Mode
 - defaults for custom field modal
 - persist board and game state between tab reloads
@@ -16,8 +15,10 @@
 - ding animation isn't quite right
 - minesweeper window needs to defocus when custom is open
 - flags are ignored when clearing
+- flags placed before board starts are removed (THIS IS THE SAME BUG????)
 
 ## Done:
+- You can't lose on your first click
 - Cheat code
 - Blind mode scaling
 - Best Times
