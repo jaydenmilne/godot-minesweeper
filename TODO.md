@@ -2,15 +2,11 @@
 
 - Game Menu
   - Colors
-  - Best Times
  - Exit
 - Help Menu
 - about modal
 - Cheat code
-- You win popup dialog thing -> fastest time dialog
 - You can't lose on your first click
-- Title bar dragging
-- Blind mode scaling
 - Non Color Mode
 - defaults for custom field modal
 - persist board and game state between tab reloads
@@ -18,12 +14,13 @@
 - main window needs to be disabled when modals are open
 
 ### Errata
-- Face reacts to clicking anywhere in game instead of just within the window
 - ding animation isn't quite right
 - minesweeper window needs to defocus when custom is open
 - flags are ignored when clearing
 
 ## Done:
+- Blind mode scaling
+- Best Times
 - persist high scores
 - secret no rules custom mode???
 - Timer starts at one
@@ -38,6 +35,8 @@
  - Sound
 - Canvas resizing (run at native resolution in browser)
 - Sound
+- Title bar dragging
+- You win popup dialog thing -> fastest time dialog
 
 ### Errata
 - minesweeper window resizes when you resize window
@@ -46,6 +45,7 @@
 - question marks should be clickable
 - It plays the wrong game over music??
 - Clicking on menu bar causes mouth to open
+- Face reacts to clicking anywhere in game instead of just within the window
 
 ## Devblog
 

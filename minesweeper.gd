@@ -105,9 +105,13 @@ func change_game_state(new_state: GameState):
 		if enable_sound:
 			$Sound.stream = SOUND_WIN
 			$Sound.play()
-		var new_name = await $fastest_time_modal.player_name
+
 		var save_manager = self.get_node("/root/SaveManager")
-		save_manager.store_score(self.time, $MenuBar.difficulty, new_name)
+		if save_manager.has_high_score(self.time, $MenuBar.difficulty):
+			$fastest_time_modal.show_modal($MenuBar.difficulty)
+			var new_name = await $fastest_time_modal.player_name
+			save_manager.store_score(self.time, $MenuBar.difficulty, new_name)
+			$MenuBar/fastest_minesweepers.show_scores()
 			
 	match current_state:
 		GameState.READY_TO_START:

@@ -41,18 +41,16 @@ func load_highscores() -> Dictionary:
 	
 	return json.data
 
+func has_high_score(score: int, difficulty: menu_bar.GameDifficulty) -> bool:
+	var high_scores = load_highscores()
+	var difficulty_name: String = menu_bar.GameDifficulty.keys()[difficulty]
+	return high_scores[difficulty_name]["time"] > score
+
 func store_score(score: int, difficulty: menu_bar.GameDifficulty, name: String):
 	var high_scores = load_highscores()
 	var difficulty_name: String = menu_bar.GameDifficulty.keys()[difficulty]
-	if high_scores[difficulty_name]["time"] <= score:
-		# not a high score
-		return
-		
-	# has a new high score, bring up the modal
-	print("has a new high score `%d` for difficulty `%s`" % [score, difficulty_name])
-	$fastest_time_modal.show_modal($MenuBar.difficulty)
 	
-	print("storing score `%d` for name `%s` on difficulty `%s`" % [self.time, name, difficulty_name])
+	print("storing score `%d` for name `%s` on difficulty `%s`" % [score, name, difficulty_name])
 	high_scores[difficulty_name] = {
 		"time": score,
 		"name": name,
