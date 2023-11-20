@@ -5,7 +5,6 @@
  - Exit
 - Help Menu
 - about modal
-- Cheat code
 - You can't lose on your first click
 - Non Color Mode
 - defaults for custom field modal
@@ -19,6 +18,7 @@
 - flags are ignored when clearing
 
 ## Done:
+- Cheat code
 - Blind mode scaling
 - Best Times
 - persist high scores

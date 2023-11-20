@@ -281,7 +281,6 @@ func _gui_input(event) -> void:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed and event.position.y >= 40:
 				# always set face to shocked, the game does this for some reason
-				# TODO: not if its in the menu bar
 				set_face(FACE_OOOOOO)
 				clicking = true
 			else:

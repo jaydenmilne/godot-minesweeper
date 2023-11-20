@@ -43,4 +43,10 @@ layout_mode = 2
 texture_normal = ExtResource("3_0bho1")
 texture_pressed = ExtResource("2_k3kfl")
 
+[node name="CheatPixel" type="ColorRect" parent="."]
+visible = false
+layout_mode = 0
+offset_right = 1.0
+offset_bottom = 1.0
+
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Magnifier" to="." method="_on_magnifier_pressed"]

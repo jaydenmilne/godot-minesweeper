@@ -129,10 +129,11 @@ text = "999 seconds"
 layout_mode = 0
 offset_left = 168.0
 offset_top = 48.0
-offset_right = 247.0
+offset_right = 259.0
 offset_bottom = 67.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Anonymous"
+text = "0000000000000000000000"
+clip_text = true
 
 [node name="IntermediateTime" type="Label" parent="."]
 layout_mode = 0
@@ -147,10 +148,11 @@ text = "999 seconds"
 layout_mode = 0
 offset_left = 168.0
 offset_top = 65.0
-offset_right = 247.0
+offset_right = 259.0
 offset_bottom = 84.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "Anonymous"
+clip_text = true
 
 [node name="ExpertTime" type="Label" parent="."]
 layout_mode = 0
@@ -165,10 +167,11 @@ text = "999 seconds"
 layout_mode = 0
 offset_left = 168.0
 offset_top = 81.0
-offset_right = 247.0
+offset_right = 259.0
 offset_bottom = 100.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Anonymous"
+text = "000000000000000000000000000000"
+clip_text = true
 
 [node name="Sound" type="AudioStreamPlayer2D" parent="."]
 
