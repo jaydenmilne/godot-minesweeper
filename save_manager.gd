@@ -42,6 +42,8 @@ func load_highscores() -> Dictionary:
 	return json.data
 
 func has_high_score(score: int, difficulty: menu_bar.GameDifficulty) -> bool:
+	if difficulty == menu_bar.GameDifficulty.CUSTOM:
+		return false
 	var high_scores = load_highscores()
 	var difficulty_name: String = menu_bar.GameDifficulty.keys()[difficulty]
 	return high_scores[difficulty_name]["time"] > score

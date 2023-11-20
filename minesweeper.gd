@@ -486,6 +486,11 @@ func _on_menu_bar_change_difficulty(width, height, num_mines):
 	$Grid.clear()
 	set_window_size()
 	change_game_state(GameState.READY_TO_START)
+	
+	$MenuBar/CustomModal/Height.text = str(height)
+	$MenuBar/CustomModal/Width.text = str(width)
+	$MenuBar/CustomModal/Mines.text = str(num_mines)
+	
 
 func _on_menu_bar_marks_enabled_changed(new_state):
 	enable_marks = new_state
