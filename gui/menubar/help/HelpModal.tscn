@@ -39,7 +39,7 @@ texture_pressed = ExtResource("4_q5qb2")
 
 [node name="WhatElseDoYouWant" type="AcceptDialog" parent="."]
 title = "Uhh"
-dialog_text = "No, I didn't make this window work
+dialog_text = "No, I didn't make this dialog work
 
 What else do you want from me??"
 

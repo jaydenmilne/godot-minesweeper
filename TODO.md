@@ -2,8 +2,7 @@
 
 - Game Menu
  - Exit
-- Help Menu
-- about modal
+
 - persist board and game state between tab reloads
 - stop clock cheat
 - main window needs to be disabled when modals are open
@@ -16,6 +15,8 @@
 - clicking on grid at different scales is BROKEN AF
 
 ## Done:
+- Help Menu
+- about modal
 - Non Color Mode
 - defaults for custom field modal
 - You can't lose on your first click

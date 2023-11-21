@@ -34,6 +34,7 @@ func _on_cancel_pressed():
 
 
 func _on_question_pressed():
+	$AcceptDialog.initial_position = Window.WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS
 	$AcceptDialog.visible = true
 	self.max_height = 99999
 	self.max_width = 99999

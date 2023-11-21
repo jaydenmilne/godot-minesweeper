@@ -15,4 +15,5 @@ func _on_x_pressed():
 func _on_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.pressed:
+			$WhatElseDoYouWant.initial_position = Window.WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS
 			$WhatElseDoYouWant.show()

@@ -22,6 +22,7 @@ func show_scores():
 
 
 func _on_question_pressed():
+	$NoEasterEggs.initial_position = Window.WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS
 	$NoEasterEggs.visible = true
 
 

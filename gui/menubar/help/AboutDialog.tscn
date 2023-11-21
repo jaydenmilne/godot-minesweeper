@@ -1,0 +1,105 @@
+[gd_scene load_steps=8 format=3 uid="uid://bhyw6mgi2qkeu"]
+
+[ext_resource type="Script" path="res://gui/menubar/help/AboutDialog.gd" id="1_op6pb"]
+[ext_resource type="Texture2D" uid="uid://d35otptfh30v4" path="res://gui/menubar/help/about_modal.png" id="1_ppl75"]
+[ext_resource type="PackedScene" uid="uid://dfye7os5krgij" path="res://gui/title_bar_drag_zone.tscn" id="2_0u3tq"]
+[ext_resource type="Texture2D" uid="uid://ddrisd3030f5r" path="res://gui/close/x.png" id="3_nexxb"]
+[ext_resource type="Texture2D" uid="uid://d1031tc4bnpjf" path="res://gui/close/x_pressed.png" id="4_g8kbt"]
+[ext_resource type="Texture2D" uid="uid://bvncvyt3dhrga" path="res://gui/menubar/help/about_ok.png" id="5_h155g"]
+[ext_resource type="Texture2D" uid="uid://q42b43s4dcna" path="res://gui/menubar/help/about_ok_pressed.png" id="6_cy5uf"]
+
+[node name="AboutDialog" type="Control"]
+layout_mode = 3
+anchor_right = 0.818
+anchor_bottom = 0.643
+offset_right = 0.18399
+offset_bottom = -0.216003
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_op6pb")
+
+[node name="ModalBody" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_ppl75")
+
+[node name="TitleBarDragZone" parent="." instance=ExtResource("2_0u3tq")]
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 398.0
+offset_bottom = 21.0
+
+[node name="X" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 398.0
+offset_top = 5.0
+offset_right = 414.0
+offset_bottom = 19.0
+texture_normal = ExtResource("3_nexxb")
+texture_pressed = ExtResource("4_g8kbt")
+
+[node name="OK" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 333.0
+offset_top = 295.0
+offset_right = 408.0
+offset_bottom = 318.0
+texture_normal = ExtResource("5_h155g")
+texture_pressed = ExtResource("6_cy5uf")
+
+[node name="Body" type="Label" parent="."]
+layout_mode = 0
+offset_left = 107.0
+offset_top = 112.0
+offset_right = 253.0
+offset_bottom = 129.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Minesweeper, Godot Edition
+Version 1.0
+Copyright (C) 2023
+by Jayden Milne
+
+This product is licensed under the Affero GPL 3.0 or later"
+
+[node name="SourceCode" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 107.0
+offset_top = 227.0
+offset_right = 186.0
+offset_bottom = 244.0
+theme_override_colors/default_color = Color(0, 0, 1, 1)
+text = "Source Code"
+
+[node name="License" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 194.0
+offset_top = 227.0
+offset_right = 267.0
+offset_bottom = 244.0
+theme_override_colors/default_color = Color(0, 0, 1, 1)
+text = "License"
+scroll_active = false
+
+[node name="FreeMemory" type="Label" parent="."]
+layout_mode = 0
+offset_left = 107.0
+offset_top = 254.0
+offset_right = 337.0
+offset_bottom = 271.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Physical memory available to Godot: 128 KB"
+
+[node name="Hint" type="Label" parent="."]
+layout_mode = 0
+offset_left = 107.0
+offset_top = 299.0
+offset_right = 337.0
+offset_bottom = 316.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Hint: Press ? in the custom size dialog"
+
+[connection signal="update_window_position" from="TitleBarDragZone" to="." method="_on_title_bar_drag_zone_update_window_position"]
+[connection signal="pressed" from="X" to="." method="_on_ok_pressed"]
+[connection signal="pressed" from="OK" to="." method="_on_ok_pressed"]
+[connection signal="gui_input" from="SourceCode" to="." method="_on_source_code_gui_input"]

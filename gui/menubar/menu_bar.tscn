@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://dexhilxkt3sfx"]
+[gd_scene load_steps=29 format=3 uid="uid://dexhilxkt3sfx"]
 
 [ext_resource type="Texture2D" uid="uid://dptaxss6pbff" path="res://gui/menubar/game/game.png" id="1_rfm8j"]
 [ext_resource type="Script" path="res://gui/menubar/menu_bar.gd" id="1_t4bap"]
@@ -26,6 +26,7 @@
 [ext_resource type="Texture2D" uid="uid://b7ang4i7kmy3t" path="res://gui/menubar/help/help_using_help.png" id="22_uo8xq"]
 [ext_resource type="Texture2D" uid="uid://bxailu0xcoio1" path="res://gui/menubar/help/help_about.png" id="23_i8toy"]
 [ext_resource type="PackedScene" uid="uid://bea0veoviwaq8" path="res://gui/menubar/help/HelpModal.tscn" id="26_xyisr"]
+[ext_resource type="PackedScene" uid="uid://bhyw6mgi2qkeu" path="res://gui/menubar/help/AboutDialog.tscn" id="27_yks25"]
 
 [sub_resource type="Shortcut" id="Shortcut_amrtu"]
 
@@ -156,6 +157,7 @@ offset_bottom = 209.0
 texture_hover = ExtResource("18_f58i0")
 
 [node name="HelpMenu" type="TextureRect" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 39.0
 offset_top = 17.0
@@ -211,6 +213,10 @@ visible = false
 layout_mode = 1
 
 [node name="HelpModal" parent="." instance=ExtResource("26_xyisr")]
+visible = false
+layout_mode = 1
+
+[node name="AboutDialog" parent="." instance=ExtResource("27_yks25")]
 visible = false
 layout_mode = 1
 

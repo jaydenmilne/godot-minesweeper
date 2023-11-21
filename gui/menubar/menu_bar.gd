@@ -185,3 +185,4 @@ func _on_show_help():
 
 func _on_about_minesweeper_pressed():
 	self.hide_menus()
+	$AboutDialog.show()
