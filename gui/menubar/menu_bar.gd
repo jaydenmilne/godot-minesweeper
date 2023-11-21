@@ -177,3 +177,11 @@ func _on_custom_modal_change_difficulty(width: int, height: int, num_mines: int)
 func _on_best_times_button_pressed():
 	self.hide_menus()
 	$fastest_minesweepers.show_scores()
+
+
+func _on_show_help():
+	self.hide_menus()
+	$HelpModal.show()
+
+func _on_about_minesweeper_pressed():
+	self.hide_menus()

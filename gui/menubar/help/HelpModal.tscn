@@ -1,0 +1,48 @@
+[gd_scene load_steps=6 format=3 uid="uid://bea0veoviwaq8"]
+
+[ext_resource type="Script" path="res://gui/menubar/help/HelpModal.gd" id="1_c26ru"]
+[ext_resource type="Texture2D" uid="uid://djnamnyv13ndl" path="res://gui/menubar/help/help_modal.png" id="1_foubd"]
+[ext_resource type="PackedScene" uid="uid://dfye7os5krgij" path="res://gui/title_bar_drag_zone.tscn" id="2_5eti0"]
+[ext_resource type="Texture2D" uid="uid://ddrisd3030f5r" path="res://gui/close/x.png" id="3_oly0c"]
+[ext_resource type="Texture2D" uid="uid://d1031tc4bnpjf" path="res://gui/close/x_pressed.png" id="4_q5qb2"]
+
+[node name="HelpModal" type="Control"]
+layout_mode = 3
+anchor_right = 1.289
+anchor_bottom = 1.066
+offset_right = 0.0319824
+offset_bottom = 0.207947
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_c26ru")
+
+[node name="Modal" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 660.0
+offset_bottom = 546.0
+texture = ExtResource("1_foubd")
+
+[node name="TitleBarDragZone" parent="." instance=ExtResource("2_5eti0")]
+offset_left = 24.0
+offset_top = 4.0
+offset_right = 604.0
+offset_bottom = 22.0
+
+[node name="X" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 638.0
+offset_top = 6.0
+offset_right = 654.0
+offset_bottom = 20.0
+texture_normal = ExtResource("3_oly0c")
+texture_pressed = ExtResource("4_q5qb2")
+
+[node name="WhatElseDoYouWant" type="AcceptDialog" parent="."]
+title = "Uhh"
+dialog_text = "No, I didn't make this window work
+
+What else do you want from me??"
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="update_window_position" from="TitleBarDragZone" to="." method="_on_title_bar_drag_zone_update_window_position"]
+[connection signal="pressed" from="X" to="." method="_on_x_pressed"]
