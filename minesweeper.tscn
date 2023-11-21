@@ -1,12 +1,11 @@
-[gd_scene load_steps=15 format=3 uid="uid://cvoiy5pk06wqi"]
+[gd_scene load_steps=13 format=3 uid="uid://cvoiy5pk06wqi"]
 
 [ext_resource type="Script" path="res://minesweeper.gd" id="1_7x103"]
-[ext_resource type="Texture2D" uid="uid://ccqqlic3sl2hv" path="res://bitmap/9patch.png" id="2_crupm"]
+[ext_resource type="Texture2D" uid="uid://vxddt0wejw83" path="res://bitmap/9patch_bw_texture.tres" id="2_8dni1"]
 [ext_resource type="PackedScene" uid="uid://bi7dgcbwgxd7j" path="res://counter.tscn" id="3_nlgsr"]
 [ext_resource type="Texture2D" uid="uid://sw5od8doucr0" path="res://bitmap/face/button_frame.png" id="4_awbk7"]
 [ext_resource type="Texture2D" uid="uid://hco6ldm5p3k2" path="res://bitmap/face/face_happy.tres" id="4_iuhcx"]
 [ext_resource type="Texture2D" uid="uid://bfosekfknaxt6" path="res://bitmap/face/face_pressed.tres" id="5_q6t5u"]
-[ext_resource type="Texture2D" uid="uid://bisxb31ivom1r" path="res://bitmap/410.bmp" id="6_o3s8q"]
 [ext_resource type="PackedScene" uid="uid://dexhilxkt3sfx" path="res://gui/menubar/menu_bar.tscn" id="8_kg1x7"]
 [ext_resource type="PackedScene" uid="uid://dfye7os5krgij" path="res://gui/title_bar_drag_zone.tscn" id="8_sl2cy"]
 [ext_resource type="PackedScene" uid="uid://bagb4oxjuitug" path="res://gui/highscore/fastest_time/fastest_time_modal.tscn" id="10_armt6"]
@@ -19,27 +18,7 @@ gradient = SubResource("Gradient_uateg")
 width = 1024
 height = 1
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cwamf"]
-texture = ExtResource("6_o3s8q")
-0:0/0 = 0
-0:1/0 = 0
-0:2/0 = 0
-0:3/0 = 0
-0:4/0 = 0
-0:5/0 = 0
-0:6/0 = 0
-0:7/0 = 0
-0:8/0 = 0
-0:9/0 = 0
-0:10/0 = 0
-0:11/0 = 0
-0:12/0 = 0
-0:13/0 = 0
-0:14/0 = 0
-0:15/0 = 0
-
 [sub_resource type="TileSet" id="TileSet_4dftg"]
-sources/0 = SubResource("TileSetAtlasSource_cwamf")
 
 [node name="Minesweeper" type="Control"]
 layout_mode = 3
@@ -82,7 +61,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_crupm")
+texture = ExtResource("2_8dni1")
 region_rect = Rect2(0, 0, 170, 251)
 patch_margin_left = 100
 patch_margin_top = 205

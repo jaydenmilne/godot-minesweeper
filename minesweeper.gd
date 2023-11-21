@@ -37,10 +37,21 @@ const FACE_OOOOOO: Resource = preload("res://bitmap/face/face_shocked.tres")
 const FACE_HAPPY: Resource = preload("res://bitmap/face/face_happy.tres")
 const FACE_DEAD: Resource = preload("res://bitmap/face/face_dead.tres")
 const FACE_COOL: Resource = preload("res://bitmap/face/face_cool.tres")
+const FACE_PRESSED: Resource = preload("res://bitmap/face/face_pressed.tres")
+
+const FACE_COLOR_ATLAS: Resource = preload("res://bitmap/face/face_color_atlas.tres")
+const FACE_BW_ATLAS: Resource = preload("res://bitmap/face/face_bw_atlas.tres")
 
 const SOUND_CLOCK: Resource = preload("res://sound/432.wav")
 const SOUND_WIN: Resource = preload("res://sound/433.wav")
 const SOUND_KABOOM: Resource = preload("res://sound/434.wav")
+
+const GRID_TILESET_COLOR: Resource = preload("res://bitmap/minebtn/color_tileset.tres")
+const GRID_TILESET_BW: Resource = preload("res://bitmap/minebtn/bw_tileset.tres")
+
+const NINE_PATCH_COLOR: Resource = preload("res://bitmap/9patch_texture.tres")
+const NINE_PATCH_BW: Resource = preload("res://bitmap/9patch_bw_texture.tres")
+
 
 const NUMBER_LOOKUP = {
 	1: Vector2i(0, 14),
@@ -496,7 +507,21 @@ func _on_menu_bar_marks_enabled_changed(new_state):
 	enable_marks = new_state
 
 func _on_menu_bar_color_enabled_changed(new_state):
-	enable_color = new_state
+	# things that need to change:
+	# - base 9patch
+	# - face
+	# - timer colors
+	# - atlas for grid
+	
+	$Window/MarginContainer/Bar/MineCounter.set_color_mode(new_state)
+	$Window/MarginContainer/Bar/TimeBox.set_color_mode(new_state)
+	
+	for face in [FACE_OOOOOO, FACE_HAPPY, FACE_DEAD, FACE_COOL, FACE_PRESSED]:
+		face.atlas = self.FACE_COLOR_ATLAS if new_state else FACE_BW_ATLAS
+	
+	$Grid.tile_set = self.GRID_TILESET_COLOR if new_state else self.GRID_TILESET_BW
+	
+	$Window.texture = self.NINE_PATCH_COLOR if new_state else self.NINE_PATCH_BW
 
 func _on_menu_bar_sound_enabled_changed(new_state):
 	enable_sound = new_state

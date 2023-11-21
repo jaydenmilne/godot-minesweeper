@@ -23,6 +23,8 @@ var lookup = {
 	"-": load("res://bitmap/numbers/dash.tres"),
 }
 
+var color_atlas: Resource = load("res://bitmap/color_numbers_texture.tres")
+var bw_atlas: Resource = load("res://bitmap/bw_numbers_texture.tres")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -31,3 +33,9 @@ func _ready():
 
 func _on_change_value(value: String):
 	self.set_value(value)
+	
+func set_color_mode(color: bool):
+	var number_atlas = color_atlas if color else bw_atlas
+
+	for atlas_texture in lookup.values():
+		atlas_texture.atlas = number_atlas

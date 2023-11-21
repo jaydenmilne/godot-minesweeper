@@ -1,0 +1,25 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://begox3e3xtg3p"]
+
+[ext_resource type="Texture2D" uid="uid://blxnm07o0531b" path="res://bitmap/minebtn/grid_atlas_bw.tres" id="2_pqi5t"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cwamf"]
+texture = ExtResource("2_pqi5t")
+0:0/0 = 0
+0:1/0 = 0
+0:2/0 = 0
+0:3/0 = 0
+0:4/0 = 0
+0:5/0 = 0
+0:6/0 = 0
+0:7/0 = 0
+0:8/0 = 0
+0:9/0 = 0
+0:10/0 = 0
+0:11/0 = 0
+0:12/0 = 0
+0:13/0 = 0
+0:14/0 = 0
+0:15/0 = 0
+
+[resource]
+sources/0 = SubResource("TileSetAtlasSource_cwamf")

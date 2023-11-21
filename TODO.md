@@ -1,12 +1,9 @@
 ## TODO
 
 - Game Menu
-  - Colors
  - Exit
 - Help Menu
 - about modal
-- Non Color Mode
-- defaults for custom field modal
 - persist board and game state between tab reloads
 - stop clock cheat
 - main window needs to be disabled when modals are open
@@ -16,8 +13,11 @@
 - minesweeper window needs to defocus when custom is open
 - flags are ignored when clearing
 - flags placed before board starts are removed (THIS IS THE SAME BUG????)
+- clicking on grid at different scales is BROKEN AF
 
 ## Done:
+- Non Color Mode
+- defaults for custom field modal
 - You can't lose on your first click
 - Cheat code
 - Blind mode scaling
@@ -32,6 +32,7 @@
  - New
  - Difficulty
  - Marks
+ - Colors
  - Custom difficulty dialog
  - Sound
 - Canvas resizing (run at native resolution in browser)
