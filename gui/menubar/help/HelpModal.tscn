@@ -40,8 +40,7 @@ texture_pressed = ExtResource("4_q5qb2")
 [node name="WhatElseDoYouWant" type="AcceptDialog" parent="."]
 title = "Uhh"
 dialog_text = "No, I didn't make this dialog work
-
-What else do you want from me??"
+You expect too much"
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="update_window_position" from="TitleBarDragZone" to="." method="_on_title_bar_drag_zone_update_window_position"]

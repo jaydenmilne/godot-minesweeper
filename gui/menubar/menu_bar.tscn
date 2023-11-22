@@ -234,6 +234,7 @@ layout_mode = 1
 [connection signal="pressed" from="GameMenu/ColorButton" to="." method="_on_color_button_pressed"]
 [connection signal="pressed" from="GameMenu/SoundButton" to="." method="_on_sound_button_pressed"]
 [connection signal="pressed" from="GameMenu/BestTimesButton" to="." method="_on_best_times_button_pressed"]
+[connection signal="pressed" from="GameMenu/ExitButton" to="." method="_on_exit_button_pressed"]
 [connection signal="pressed" from="HelpMenu/ContentsButton" to="." method="_on_show_help"]
 [connection signal="pressed" from="HelpMenu/SearchHelpButton" to="." method="_on_show_help"]
 [connection signal="pressed" from="HelpMenu/SearchUsingHelp" to="." method="_on_show_help"]

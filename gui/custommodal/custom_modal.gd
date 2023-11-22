@@ -1,13 +1,22 @@
 extends Control
 
+class_name custom_modal
+
 signal change_difficulty(width: int, height: int, num_mines: int)
 
-var max_width = 30
-var max_height = 24
+const MAX_WIDTH = 30
+const MAX_HEIGHT = 24
+
+var max_width = MAX_WIDTH
+var max_height = MAX_HEIGHT
+
 var fully_unlimited = false
 
 func _ready():
 	$TitleBarDragZone.get_screen_position = self.get_screen_position
+
+static func get_max_mines(width: int, height: int):
+	return (width - 1) * (height - 1)
 
 func _on_ok_pressed():
 	self.visible = false
@@ -15,7 +24,7 @@ func _on_ok_pressed():
 	var width = clampi(int($Width.text), 9, self.max_width)
 	var height = clampi(int($Height.text), 9, self.max_height)
 	
-	var max_mines = (width - 1) * (height - 1)
+	var max_mines = self.get_max_mines(width, height)
 	if self.fully_unlimited:
 		max_mines = width * height
 	

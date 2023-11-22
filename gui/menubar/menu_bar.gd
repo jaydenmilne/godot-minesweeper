@@ -11,10 +11,13 @@ enum GameDifficulty {
 	CUSTOM = 3
 }
 
-var marks_enabled = true
-var sound_enabled = true
-var color_enabled = true
+var marks_enabled = false
+var sound_enabled = false
+var color_enabled = false
 var difficulty: GameDifficulty = self.GameDifficulty.BEGINNER
+var num_mines: int = 0
+var width: int = 0
+var height: int =0
 
 """If right clicking to question marks are allowed"""
 signal new_game
@@ -25,7 +28,29 @@ signal color_enabled_changed(new_state: bool)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	self.update_difficulty(self.GameDifficulty.BEGINNER)
+	# load saved options
+	var options = save_manager.load_options()
+	
+	print("loading options", options)
+	
+	self.color_enabled = options[save_manager.GameOptions.find_key(save_manager.GameOptions.ENABLE_COLOR)]
+	self.marks_enabled = options[save_manager.GameOptions.find_key(save_manager.GameOptions.ENABLE_MARKS)]
+	self.sound_enabled = options[save_manager.GameOptions.find_key(save_manager.GameOptions.ENABLE_SOUND)]
+	
+	self.change_difficulty_helper(
+		options[save_manager.GameOptions.find_key(save_manager.GameOptions.WIDTH)],
+		options[save_manager.GameOptions.find_key(save_manager.GameOptions.HEIGHT)],
+		options[save_manager.GameOptions.find_key(save_manager.GameOptions.NUM_MINES)]
+	)
+	
+	# update the checks
+	self.update_difficulty(
+		self.GameDifficulty[
+			options[
+				save_manager.GameOptions.find_key(save_manager.GameOptions.DIFFICULTY)
+			]
+		]
+	)
 	
 	$GameMenu/ColorButton.update_checked(self.color_enabled)
 	self.color_enabled_changed.emit(self.color_enabled)
@@ -111,28 +136,29 @@ func update_difficulty(new_difficulty: GameDifficulty):
 			$GameMenu/IntermediateButton.update_checked(false)
 			$GameMenu/ExpertButton.update_checked(false)
 			$GameMenu/CustomButton.update_checked(false)
-			self.change_difficulty.emit(9, 9, 10)
+			self.change_difficulty_helper(9, 9, 10)
 			
 		GameDifficulty.INTERMEDIATE:
 			$GameMenu/BeginnerButton.update_checked(false)
 			$GameMenu/IntermediateButton.update_checked(true)
 			$GameMenu/ExpertButton.update_checked(false)
 			$GameMenu/CustomButton.update_checked(false)
-			self.change_difficulty.emit(16, 16, 40)
+			self.change_difficulty_helper(16, 16, 40)
 			
 		GameDifficulty.EXPERT:
 			$GameMenu/BeginnerButton.update_checked(false)
 			$GameMenu/IntermediateButton.update_checked(false)
 			$GameMenu/ExpertButton.update_checked(true)
 			$GameMenu/CustomButton.update_checked(false)
-			self.change_difficulty.emit(30, 16, 99)
+			self.change_difficulty_helper(30, 16, 99)
 			
 		GameDifficulty.CUSTOM:
 			$GameMenu/BeginnerButton.update_checked(false)
 			$GameMenu/IntermediateButton.update_checked(false)
 			$GameMenu/ExpertButton.update_checked(false)
 			$GameMenu/CustomButton.update_checked(true)
-
+	self.save_options()
+	
 func _on_beginner_button_pressed():
 	self.hide_menus()
 	self.update_difficulty(self.GameDifficulty.BEGINNER)
@@ -151,6 +177,25 @@ func _on_custom_button_pressed():
 	self.hide_menus()
 	$CustomModal.visible = true
 
+func change_difficulty_helper(width: int, height: int, num_mines: int):
+	self.width = width
+	self.height = height
+	self.num_mines = num_mines
+	
+	self.change_difficulty.emit(width, height, num_mines)
+
+func save_options():
+	save_manager.save_options(
+		self.color_enabled, 
+		self.marks_enabled,
+		self.sound_enabled,
+		self.difficulty,
+		self.width,
+		self.height,
+		self.num_mines
+	)
+	
+
 func _on_marks_button_pressed():
 	self.hide_menus()
 	self.marks_enabled = not self.marks_enabled
@@ -162,16 +207,19 @@ func _on_color_button_pressed():
 	self.color_enabled = not self.color_enabled
 	self.color_enabled_changed.emit(self.color_enabled)
 	$GameMenu/ColorButton.update_checked(self.color_enabled)
+	self.save_options()
 
 func _on_sound_button_pressed():
 	self.hide_menus()
 	self.sound_enabled = not self.sound_enabled
 	self.sound_enabled_changed.emit(self.sound_enabled)
 	$GameMenu/SoundButton.update_checked(self.sound_enabled)
+	self.save_options()
+	
 
 func _on_custom_modal_change_difficulty(width: int, height: int, num_mines: int):
+	self.change_difficulty_helper(width, height, num_mines)
 	self.update_difficulty(self.GameDifficulty.CUSTOM)
-	self.change_difficulty.emit(width, height, num_mines)
 
 
 func _on_best_times_button_pressed():
@@ -186,3 +234,7 @@ func _on_show_help():
 func _on_about_minesweeper_pressed():
 	self.hide_menus()
 	$AboutDialog.show()
+
+
+func _on_exit_button_pressed():
+	self.get_tree().quit()
