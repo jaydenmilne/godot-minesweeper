@@ -1,0 +1,14 @@
+res://gui/highscore/fastest_time/fastest_time_modal.tscn
+res://gui/theme_system.tres
+res://bitmap/face/face_cool.tres
+res://bitmap/minebtn/color_tileset.tres
+res://bitmap/minebtn/bw_tileset.tres
+res://gui/custommodal/custom_modal.tscn
+res://gui/highscore/fastest_minesweepers/fastest_minesweepers.tscn
+res://gui/menubar/menu_bar.tscn
+res://desktop.tscn
+res://minesweeper.tscn
+res://gui/menubar/help/HelpModal.tscn
+res://gui/menubar/help/AboutDialog.tscn
+res://save_manager.gd
+res://minesweeper.gd

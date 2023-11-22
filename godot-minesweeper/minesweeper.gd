@@ -4,7 +4,7 @@ extends Control
 var time: int = 0
 var mines_remaining: int = 10
 var current_state: GameState = GameState.READY_TO_START
-var DEBUG_SHOW_BOARD = true
+var DEBUG_SHOW_BOARD = false
 
 # menu options
 var enable_marks: bool = false
