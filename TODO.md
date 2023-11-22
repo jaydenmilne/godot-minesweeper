@@ -1,7 +1,5 @@
 ## TODO
 
-- Game Menu
- - Exit
 - Credit font
 - persist board and game state between tab reloads
 - main window needs to be disabled when modals are open
@@ -9,9 +7,6 @@
 ### Errata
 - ding animation isn't quite right
 - minesweeper window needs to defocus when custom is open
-- flags are ignored when clearing
-- flags placed before board starts are removed (THIS IS THE SAME BUG????)
-- clicking on grid at different scales is BROKEN AF
 
 ## Done:
 - persist options
@@ -37,6 +32,7 @@
  - Colors
  - Custom difficulty dialog
  - Sound
+ - Exit
 - Canvas resizing (run at native resolution in browser)
 - Sound
 - Title bar dragging
@@ -50,6 +46,9 @@
 - It plays the wrong game over music??
 - Clicking on menu bar causes mouth to open
 - Face reacts to clicking anywhere in game instead of just within the window
+- flags are ignored when clearing
+- flags placed before board starts are removed (THIS IS THE SAME BUG????)
+- clicking on grid at different scales is BROKEN AF
 
 ## Devblog
 

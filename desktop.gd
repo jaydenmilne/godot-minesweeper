@@ -32,13 +32,13 @@ func _unhandled_key_input(event):
 
 const WHITE = Color('white')
 const BLACK = Color('black')
-
 func _process(_delta):
-	var click_grid_location = $Minesweeper.global2grid(self.get_global_mouse_position())
-	if $Minesweeper.loc_in_grid(click_grid_location):
-		var cell = $Minesweeper.cell_data[click_grid_location.y][click_grid_location.x]
-		if cell & $Minesweeper.FLAG_MINE:
-			$CheatPixel.color = BLACK
-			return
-	$CheatPixel.color = WHITE
+	if $CheatPixel.visible:
+		var click_grid_location = $Minesweeper.global2grid(self.get_global_mouse_position())
+		if $Minesweeper.loc_in_grid(click_grid_location):
+			var cell = $Minesweeper.cell_data[click_grid_location.y][click_grid_location.x]
+			if cell & $Minesweeper.FLAG_MINE:
+				$CheatPixel.color = BLACK
+				return
+		$CheatPixel.color = WHITE
 	

@@ -73,6 +73,7 @@ enum GameOptions {
 const OPTIONS_FILE = "user://options.json"
 
 static func load_options() -> Dictionary:
+	# why didn't I just use ConfigFile...
 	var json = JSON.new()
 	if not FileAccess.file_exists(OPTIONS_FILE):
 		# create them
@@ -117,3 +118,4 @@ static func save_options(color_enabled: bool, marks_enabled: bool, sound_enabled
 	
 	var file = FileAccess.open(OPTIONS_FILE, FileAccess.WRITE)
 	file.store_string(options_text)
+

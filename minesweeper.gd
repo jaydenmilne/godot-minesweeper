@@ -242,7 +242,7 @@ func handle_first_click_mine(location: Vector2i) -> void:
 		
 func click_cell(location: Vector2i) -> void:
 	var cell = cell_data[location.y][location.x]
-	
+	print("click at ", location)
 	if cell & FLAG_REVEALED:
 		# no sense doing anything if its been clicked
 		return
@@ -331,7 +331,11 @@ func _gui_input(event) -> void:
 				clicking = true
 			else:
 				# mouseup
-				var click_grid_location = global2grid(event.global_position)
+				
+				# use self.get_global_mouse_position() insetad of event.global_position
+				# global_position is not scale dependent, but the rest of the functions
+				# we call are scale dependent
+				var click_grid_location = global2grid(self.get_global_mouse_position())
 				if loc_in_grid(click_grid_location):
 					if clicking and current_state == GameState.READY_TO_START:
 						change_game_state(GameState.GAME_RUNNING)
@@ -404,8 +408,10 @@ func prepare_board() -> void:
 	# the actual minesweeper uses a 16 bit PRNG. In the same spirit, we restrict
 	# the seeds to 2^16 so that there are only that many boards. No, I'm not
 	# implementing board cycles and stuff
+	var seed = rng.randi_range(0, 2**16-1)
+	print("seed is ", seed)
+	rng.seed = seed
 	
-	rng.seed = rng.randi_range(0, 2**16)
 	
 	# place mines
 	for i in range(total_mines):
@@ -453,7 +459,6 @@ func reset_game():
 	prepare_board()
 
 func start_game():
-	reset_game()
 	# for some reason it starts at one, so call this method to increment it
 	_on_timer_timeout()
 	$Timer.start()
