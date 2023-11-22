@@ -1,7 +1,4 @@
 ## TODO
-
-- Credit font
-- persist board and game state between tab reloads
 - main window needs to be disabled when modals are open
 
 ### Errata
@@ -9,6 +6,11 @@
 - minesweeper window needs to defocus when custom is open
 
 ## Done:
+- persist board and game state between tab reloads
+ - save game state
+ - load state when save is detected
+ - delete save when game is over
+- Credit font
 - persist options
 - stop clock cheat
 - Help Menu

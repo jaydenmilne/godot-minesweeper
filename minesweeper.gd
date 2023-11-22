@@ -101,11 +101,10 @@ func set_window_size():
 func set_face(res: Resource):
 	$Window/MarginContainer/Bar/FaceButtonFrame/FaceButton.texture_normal = res
 
-
-
 func change_game_state(new_state: GameState):
 	print("changing state %s -> %s" % [GameState.keys()[current_state], GameState.keys()[new_state]])
 	var game_over_lost = func():
+		save_manager.clear_save_game()
 		$Timer.stop()
 		set_face(FACE_DEAD)
 		show_board()
@@ -114,6 +113,8 @@ func change_game_state(new_state: GameState):
 			$Sound.play()
 	
 	var game_over_won = func():
+		# Why does this crash here (save_manager is not defined???)
+		# save_manager.clear_save_game()
 		$Timer.stop()
 		set_face(FACE_COOL)
 		if enable_sound:
@@ -147,16 +148,14 @@ func change_game_state(new_state: GameState):
 				GameState.READY_TO_START:
 					reset_game()
 				GameState.GAME_OVER_WON:
+					save_manager.clear_save_game()
 					game_over_won.call()
 				_:
 					assert(false, "unexpected transition GAME_RUNNING -> %s" % GameState.keys()[new_state])
 		GameState.GAME_OVER_LOST, GameState.GAME_OVER_WON:
 			match new_state:
-				GameState.GAME_RUNNING:
-					assert(false, "I guess this is used after all")
-					update_mine_count(total_mines)
-					start_game()
 				GameState.READY_TO_START:
+					save_manager.clear_save_game()
 					reset_game()
 				_:
 					assert(false, "unexpected transition GAME_OVER_LOST / GAME_OVER_WON -> %s" % GameState.keys()[new_state])
@@ -182,6 +181,43 @@ func update_mine_count(new_count: int) -> void:
 	if mines_remaining < 0:
 		value[0] = "-"
 	$Window/MarginContainer/Bar/MineCounter.change_value.emit(value)
+
+func set_cell_data(cell_data: Array):
+	"""Forces the grid to match cell_data
+	
+	Normally changes are made to the grid and cell_data in parallel, so we don't
+	have to do something like this often. After loading a game though we need
+	to force the grid to match
+	"""
+	
+	self.cell_data = cell_data
+	self.grid_height = len(self.cell_data)
+	self.grid_width = len(self.cell_data[0])
+	
+	$Grid.clear()
+	
+	for y in range(grid_height):
+		for x in range(grid_width):
+			var location = Vector2i(x, y)
+			var cell = self.cell_data[y][x]
+			$Grid.set_cell(0, location, 0, BLANK, 0)
+			
+			if cell & self.FLAG_FLAG:
+				$Grid.set_cell(0, location, 0, FLAG, 0)
+			
+			if cell & self.FLAG_QUESTION:
+				$Grid.set_cell(0, location, 0, QUESTION, 0)
+			
+			
+			if cell & self.FLAG_REVEALED:
+				var number = cell & NUMBER_MASK
+				if number:
+					$Grid.set_cell(0, location, 0, NUMBER_LOOKUP[number], 0)
+				else:
+					$Grid.set_cell(0, location, 0, EMPTY, 0)
+			
+			if self.DEBUG_SHOW_BOARD and cell & self.FLAG_MINE:
+				$Grid.set_cell(0, Vector2i(x, y), 0, MINE, 0)
 
 func right_click_cell(location: Vector2i):
 	var type = get_cell_type(location)
@@ -239,10 +275,12 @@ func handle_first_click_mine(location: Vector2i) -> void:
 	
 	if DEBUG_SHOW_BOARD:
 		show_board()
-		
+
+func save() -> void:
+	save_manager.save_game_state(self.time, self.mines_remaining, self.cell_data)
+
 func click_cell(location: Vector2i) -> void:
 	var cell = cell_data[location.y][location.x]
-	print("click at ", location)
 	if cell & FLAG_REVEALED:
 		# no sense doing anything if its been clicked
 		return
@@ -263,6 +301,8 @@ func click_cell(location: Vector2i) -> void:
 	if cell & NUMBER_MASK:
 		$Grid.set_cell(0, location, 0, NUMBER_LOOKUP[cell & NUMBER_MASK], 0)
 		cell_data[location.y][location.x] |= FLAG_REVEALED
+		self.save()
+		
 		if game_is_won():
 			change_game_state(GameState.GAME_OVER_WON)
 		return # no flooding if you clicked on a number
@@ -301,7 +341,8 @@ func click_cell(location: Vector2i) -> void:
 
 		# it's blank, reveal it
 		$Grid.set_cell(0, cur, 0, EMPTY, 0)
-
+	
+	self.save()
 	if game_is_won():
 		change_game_state(GameState.GAME_OVER_WON)
 	
@@ -433,17 +474,36 @@ func prepare_board() -> void:
 	if DEBUG_SHOW_BOARD:
 		show_board()
 	
+func load_save(save: Array):
+	self.mines_remaining = save[save_manager.LoadSaveGameResult.MINES_REMAINING]
+	self.time = save[save_manager.LoadSaveGameResult.TIME]
+	assert(len(cell_data) and len(cell_data[0]))
 	
+	self.set_cell_data(save[save_manager.LoadSaveGameResult.CELL_DATA])
+	set_window_size()
+	
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$Window/MarginContainer/Bar/MineCounter.change_value.emit("%03d" % mines_remaining)
-	$Window/MarginContainer/Bar/TimeBox.change_value.emit("000")
-	
+
 	prepare_board()
 	set_window_size()
 	
-	$MarginContainer3/HBoxContainer/TitleBarDragZone.get_screen_position = self.get_screen_position
+	if save_manager.has_save_game():
+		var save = save_manager.load_save_game()
+		if (
+			save[save_manager.LoadSaveGameResult.WORKED]
+			and len(save[save_manager.LoadSaveGameResult.CELL_DATA])
+			and len(save[save_manager.LoadSaveGameResult.CELL_DATA][0])
+		):
+			print("valid save detected, attempting to load...")
+			load_save(save)
+			self.change_game_state(GameState.GAME_RUNNING)
 		
+	
+	$Window/MarginContainer/Bar/MineCounter.change_value.emit("%03d" % mines_remaining)
+	$Window/MarginContainer/Bar/TimeBox.change_value.emit("000")
+	$MarginContainer3/HBoxContainer/TitleBarDragZone.get_screen_position = self.get_screen_position
 	
 
 func get_cell_type(grid_loc: Vector2i):
@@ -457,6 +517,7 @@ func reset_game():
 	update_mine_count(total_mines)
 	set_face(FACE_HAPPY)
 	prepare_board()
+	
 
 func start_game():
 	# for some reason it starts at one, so call this method to increment it

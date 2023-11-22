@@ -119,3 +119,44 @@ static func save_options(color_enabled: bool, marks_enabled: bool, sound_enabled
 	var file = FileAccess.open(OPTIONS_FILE, FileAccess.WRITE)
 	file.store_string(options_text)
 
+const SAVE_FILE = "user://game.save"
+
+static func save_game_state(time: int, mines_remaining: int, cell_data: Array):
+	var c = ConfigFile.new()
+	
+	c.set_value("", "time", time)
+	c.set_value("", "mines_remaining", mines_remaining)
+	c.set_value("", "cell_data", cell_data)
+	
+	c.save(SAVE_FILE)
+	
+static func has_save_game() -> bool:
+	return FileAccess.file_exists(SAVE_FILE)
+
+enum LoadSaveGameResult {
+	WORKED = 0,
+	TIME = 1,
+	MINES_REMAINING = 2,
+	CELL_DATA = 3,
+}
+
+static func load_save_game() -> Array:
+	"""Returns: [worked: bool, time: int, mines_remaining: int, cell_data: Array]""" 
+	var c = ConfigFile.new()
+	var err = c.load(SAVE_FILE)
+	
+	if err != OK:
+		print("got error %s", error_string(err))
+		return [false, 0, 0, []]
+		
+	var time = c.get_value("", "time")
+	var mines_remaining = c.get_value("", "mines_remaining")
+	var cell_data = c.get_value("", "cell_data")
+	
+	return [true, time, mines_remaining, cell_data]
+
+static func clear_save_game():
+	print("clearing save game")
+	var d = DirAccess.open("user://")
+	if d.file_exists(SAVE_FILE):
+		d.remove(SAVE_FILE)
