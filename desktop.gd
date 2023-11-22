@@ -20,6 +20,7 @@ func _unhandled_key_input(event):
 			if event.keycode == KEY_SHIFT:
 				return # ignore these
 			if event.shift_pressed and event.keycode == KEY_ENTER:
+				print("enabling secret pixel cheat")
 				cheat_index = 0
 				$CheatPixel.show()
 				return

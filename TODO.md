@@ -2,9 +2,8 @@
 
 - Game Menu
  - Exit
-
+- Credit font
 - persist board and game state between tab reloads
-- stop clock cheat
 - main window needs to be disabled when modals are open
 
 ### Errata
@@ -15,6 +14,8 @@
 - clicking on grid at different scales is BROKEN AF
 
 ## Done:
+- persist options
+- stop clock cheat
 - Help Menu
 - about modal
 - Non Color Mode

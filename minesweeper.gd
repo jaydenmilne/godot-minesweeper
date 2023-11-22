@@ -22,6 +22,9 @@ var clicking = false
 """Game allows you to click and drag and the cells are updated as you move. This
 is used to emulate that"""
 
+var mouseover = false
+"""Used to determine if we can apply the stopped clock cheat"""
+
 ## CONSTANT VALUES
 # atlas indexes for cells
 const BLANK = Vector2i(0, 0)
@@ -129,13 +132,10 @@ func change_game_state(new_state: GameState):
 			match new_state:
 				GameState.GAME_RUNNING:
 					start_game()
-				GameState.GAME_OVER_LOST:
-					# unlucky lol
-					game_over_lost.call()
 				GameState.READY_TO_START:
 					reset_game()
 				_:
-					assert(false, "unexpected transition NEW_WINDOW -> %s" % GameState.keys()[new_state])
+					assert(false, "unexpected transition READY_TO_START -> %s" % GameState.keys()[new_state])
 		GameState.GAME_RUNNING:
 			match new_state:
 				GameState.GAME_OVER_LOST:
@@ -460,6 +460,16 @@ func start_game():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
+	if (
+			self.mouseover
+			and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) 
+			and Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT) 
+			and Input.is_key_pressed(KEY_ESCAPE)
+			and not $Timer.is_stopped()
+		):
+			# left and right click cheat
+			print("enabling stopped clock cheat")
+			$Timer.stop()
 	if clicking:
 		$Grid.clear_layer(1)
 		var grid_loc = global2grid(self.get_global_mouse_position())
@@ -528,3 +538,11 @@ func _on_menu_bar_sound_enabled_changed(new_state):
 
 func _on_title_bar_drag_zone_update_window_position(pos: Vector2):
 	self.set_global_position(pos)
+
+
+func _on_mouse_entered():
+	self.mouseover = true
+	
+
+func _on_mouse_exited():
+	self.mouseover = false

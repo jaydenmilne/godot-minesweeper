@@ -163,6 +163,8 @@ offset_top = 87.0
 offset_right = 2.95999
 offset_bottom = 87.077
 
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="pressed" from="Window/MarginContainer/Bar/FaceButtonFrame/FaceButton" to="." method="_on_face_button_pressed"]
 [connection signal="update_window_position" from="MarginContainer3/HBoxContainer/TitleBarDragZone" to="." method="_on_title_bar_drag_zone_update_window_position"]
