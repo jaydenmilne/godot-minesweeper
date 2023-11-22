@@ -41,3 +41,9 @@ func _on_source_code_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.pressed:
 			OS.shell_open("https://jayd.ml")
+
+
+func _on_font_gui_input(event):
+	if event is InputEventMouseButton:
+		if event.pressed:
+			OS.shell_open("https://w95font.com/")

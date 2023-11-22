@@ -75,10 +75,20 @@ text = "Source Code"
 layout_mode = 0
 offset_left = 194.0
 offset_top = 227.0
-offset_right = 267.0
+offset_right = 239.0
 offset_bottom = 244.0
 theme_override_colors/default_color = Color(0, 0, 1, 1)
 text = "License"
+scroll_active = false
+
+[node name="Font" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 253.0
+offset_top = 227.0
+offset_right = 403.0
+offset_bottom = 244.0
+theme_override_colors/default_color = Color(0, 0, 1, 1)
+text = "Font (W95FA by Alle Sava)"
 scroll_active = false
 
 [node name="FreeMemory" type="Label" parent="."]
@@ -103,3 +113,4 @@ text = "Hint: Press ? in the custom size dialog"
 [connection signal="pressed" from="X" to="." method="_on_ok_pressed"]
 [connection signal="pressed" from="OK" to="." method="_on_ok_pressed"]
 [connection signal="gui_input" from="SourceCode" to="." method="_on_source_code_gui_input"]
+[connection signal="gui_input" from="Font" to="." method="_on_font_gui_input"]
