@@ -40,10 +40,16 @@ func _on_ok_pressed():
 func _on_source_code_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.pressed:
-			OS.shell_open("https://jayd.ml")
+			OS.shell_open("https://github.com/jaydenmilne/godot-minesweeper")
 
 
 func _on_font_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.pressed:
 			OS.shell_open("https://w95font.com/")
+
+
+func _on_license_gui_input(event):
+	if event is InputEventMouseButton:
+		if event.pressed:
+			OS.shell_open("https://github.com/jaydenmilne/godot-minesweeper/blob/main/LICENSE")

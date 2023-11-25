@@ -113,4 +113,5 @@ text = "Hint: Press ? in the custom size dialog"
 [connection signal="pressed" from="X" to="." method="_on_ok_pressed"]
 [connection signal="pressed" from="OK" to="." method="_on_ok_pressed"]
 [connection signal="gui_input" from="SourceCode" to="." method="_on_source_code_gui_input"]
+[connection signal="gui_input" from="License" to="." method="_on_license_gui_input"]
 [connection signal="gui_input" from="Font" to="." method="_on_font_gui_input"]
