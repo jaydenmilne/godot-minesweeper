@@ -1,11 +1,21 @@
 ## TODO
 - main window needs to be disabled when modals are open
+- reparent modals so they don't drag together
+- Don't build a debug version
+- Work on fake loading page
+- Add modal warning about slow loading on OSX / not loading on iphone
+- Add indexable about page for google's benefit
+- Fix title bar gradient off by one pixel
+- some way to activate debug mode
+- long tap to flag?
 
 ### Errata
 - ding animation isn't quite right
 - minesweeper window needs to defocus when custom is open
 
 ## Done:
+- Automatically scale on high dpi displays
+- Move DPI scale button from the corner, make it larger as well at lower sides
 - persist board and game state between tab reloads
  - save game state
  - load state when save is detected
