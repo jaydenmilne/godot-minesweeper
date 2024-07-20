@@ -292,9 +292,8 @@
                 engine.startGame({
                     'onProgress': function (current, total) {
                         setStatusMode('progress');
-                        console.log(current, total)
 
-                        let number_to_show = Math.floor((current / total) * 18);
+                        let number_to_show = Math.floor((current / total)) * (loadingNubs.length - 1)   ;
 
                         for (let i = 0; i <= number_to_show; i++) {
                             loadingNubs[i].style.display = 'block';
