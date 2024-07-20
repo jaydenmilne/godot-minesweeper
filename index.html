@@ -1,245 +1,316 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no">
-		<script src="coi-serviceworker.js"></script>
-		<title>godot-minesweeper</title>
-		<style>
-body {
-	touch-action: none;
-	margin: 0;
-	border: 0 none;
-	padding: 0;
-	text-align: center;
-	background-color: white;
-}
+<!doctype html>
+<html>
 
-#canvas {
-	display: block;
-	margin: 0;
-	color: white;
-}
+<head>
+    <title>Minesweeper: Godot Edition</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <script src="coi-serviceworker.js"></script>
+    <style>
+        html,
+        body {
+            touch-action: none;
+            margin: 0;
+            border: 0 none;
+            padding: 0;
+            text-align: center;
+            height: 100%;
+            width: 100%;
+            font-family: Arial, Helvetica, sans-serif;
+        }
 
-#canvas:focus {
-	outline: none;
-}
+        #canvas {
+            display: block;
+            margin: 0;
+            color: white;
+            display: none;
+        }
 
-.godot {
-	font-family: 'Noto Sans', 'Droid Sans', Arial, sans-serif;
-	color: #e0e0e0;
-	background-color: #3b3943;
-	background-image: linear-gradient(to bottom, #403e48, #35333c);
-	border: 1px solid #45434e;
-	box-shadow: 0 0 1px 1px #2f2d35;
-}
+        #canvas:focus {
+            outline: none;
+        }
 
-/* Status display */
+        #main {
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
 
-#status {
-	position: absolute;
-	left: 0;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	/* don't consume click events - make children visible explicitly */
-	visibility: hidden;
-}
+        }
 
-#status-progress {
-	width: 366px;
-	height: 7px;
-	background-color: #C3C3C3;
-	border: 1px solid #8E8E8E;
-	padding: 1px;
-	visibility: visible;
-}
+        #panic {
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            text-align: left;
+            line-height: 1;
+            display: none;
 
-@media only screen and (orientation:portrait) {
-	#status-progress {
-		width: 61.8%;
-	}
-}
+        }
 
-#status-progress-inner {
-	height: 100%;
-	width: 0;
-	box-sizing: border-box;
-	transition: width 0.5s linear;
-	background-color: #092A9E;
-	border: 1px solid #092A9E;
-}
+        .panicline {
+            font-family: 'Courier New', Courier, monospace;
+            color: white;
+            background-color: black;
+        }
 
-#status-indeterminate {
-	height: 42px;
-	visibility: visible;
-	position: relative;
-}
+        #logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+        }
 
-#status-indeterminate > div {
-	width: 4.5px;
-	height: 0;
-	border-style: solid;
-	border-width: 9px 3px 0 3px;
-	border-color: #092A9E;
-	transform-origin: center 21px;
-	position: absolute;
-}
+        #logotext {
+            width: max-content;
+            font-size: 72pt;
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+            line-height: 0.8;
+        }
 
-#status-indeterminate > div:nth-child(1) { transform: rotate( 22.5deg); }
-#status-indeterminate > div:nth-child(2) { transform: rotate( 67.5deg); }
-#status-indeterminate > div:nth-child(3) { transform: rotate(112.5deg); }
-#status-indeterminate > div:nth-child(4) { transform: rotate(157.5deg); }
-#status-indeterminate > div:nth-child(5) { transform: rotate(202.5deg); }
-#status-indeterminate > div:nth-child(6) { transform: rotate(247.5deg); }
-#status-indeterminate > div:nth-child(7) { transform: rotate(292.5deg); }
-#status-indeterminate > div:nth-child(8) { transform: rotate(337.5deg); }
 
-#status-notice {
-	margin: 0 100px;
-	line-height: 1.3;
-	visibility: visible;
-	padding: 4px 6px;
-	visibility: visible;
-}
-		</style>
-		<link id='-gd-engine-icon' rel='icon' type='image/png' href='godot-minesweeper.icon.png' />
-<link rel='apple-touch-icon' href='godot-minesweeper.apple-touch-icon.png'/>
+        #gradient {
+            background: linear-gradient(90deg, #00289F 0%, #00289F 36.72%, #0070DF 53.28%, #0070DF 83.44%, #00289F 100%);
+            min-height: 10px;
+            max-height: 20px;
+        }
 
-	</head>
-	<body>
-		<canvas id="canvas">
-			HTML5 canvas appears to be unsupported in the current browser.<br >
-			Please try updating or use a different browser.
-		</canvas>
-		<div id="status">
-			<div id="status-progress" style="display: none;" oncontextmenu="event.preventDefault();">
-				<div id ="status-progress-inner"></div>
-			</div>
-			<div id="status-indeterminate" style="display: none;" oncontextmenu="event.preventDefault();">
-				<div></div>
-				<div></div>
-				<div></div>
-				<div></div>
-				<div></div>
-				<div></div>
-				<div></div>
-				<div></div>
-			</div>
-			<div id="status-notice" class="godot" style="display: none;"></div>
-		</div>
 
-		<script src="godot-minesweeper.js"></script>
-		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"executable":"godot-minesweeper","experimentalVK":false,"fileSizes":{"godot-minesweeper.pck":352800,"godot-minesweeper.wasm":27913656},"focusCanvas":true,"gdextensionLibs":[]};
-const engine = new Engine(GODOT_CONFIG);
+        #footer {
+            background-color: #C0C0C0;
+            min-height: 70px;
+            max-height: 100px;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: space-evenly;
+        }
 
-(function () {
-	const INDETERMINATE_STATUS_STEP_MS = 100;
-	const statusProgress = document.getElementById('status-progress');
-	const statusProgressInner = document.getElementById('status-progress-inner');
-	const statusIndeterminate = document.getElementById('status-indeterminate');
-	const statusNotice = document.getElementById('status-notice');
+        #loaderdiv {
+            display: flex;
+            border: #7E7D80;
+            border-bottom-color: #FEFFFF;
+            border-right-color: #FEFFFF;
 
-	let initializing = true;
-	let statusMode = 'hidden';
+            border-style: solid;
+            width: 330px;
+            border-width: 2px;
+            height: 16px;
+        }
 
-	let animationCallbacks = [];
-	function animate(time) {
-		animationCallbacks.forEach((callback) => callback(time));
-		requestAnimationFrame(animate);
-	}
-	requestAnimationFrame(animate);
+        .blk {
+            width: 16px;
+            height: 16px;
+            margin-right: 2px;
+            background-color: #002895;
+            display: none;
+        }
 
-	function animateStatusIndeterminate(ms) {
-		const i = Math.floor((ms / INDETERMINATE_STATUS_STEP_MS) % 8);
-		if (statusIndeterminate.children[i].style.borderTopColor === '') {
-			Array.prototype.slice.call(statusIndeterminate.children).forEach((child) => {
-				child.style.borderTopColor = '';
-			});
-			statusIndeterminate.children[i].style.borderTopColor = '#dfdfdf';
-		}
-	}
+        #startingupline {
+            display: flex;
+        }
+    </style>
+</head>
 
-	function setStatusMode(mode) {
-		if (statusMode === mode || !initializing) {
-			return;
-		}
-		[statusProgress, statusIndeterminate, statusNotice].forEach((elem) => {
-			elem.style.display = 'none';
-		});
-		animationCallbacks = animationCallbacks.filter(function (value) {
-			return (value !== animateStatusIndeterminate);
-		});
-		switch (mode) {
-		case 'progress':
-			statusProgress.style.display = 'block';
-			break;
-		case 'indeterminate':
-			statusIndeterminate.style.display = 'block';
-			animationCallbacks.push(animateStatusIndeterminate);
-			break;
-		case 'notice':
-			statusNotice.style.display = 'block';
-			break;
-		case 'hidden':
-			break;
-		default:
-			throw new Error('Invalid status mode');
-		}
-		statusMode = mode;
-	}
+<body>
+    <canvas id="canvas">
+        HTML5 canvas appears to be unsupported in the current browser.<br>
+        Please try updating or use a different browser.
+    </canvas>
 
-	function setStatusNotice(text) {
-		while (statusNotice.lastChild) {
-			statusNotice.removeChild(statusNotice.lastChild);
-		}
-		const lines = text.split('\n');
-		lines.forEach((line) => {
-			statusNotice.appendChild(document.createTextNode(line));
-			statusNotice.appendChild(document.createElement('br'));
-		});
-	}
+    <div id="main">
+        <!-- main contianer div -->
+        <div id="logo">
+            <div id="logotext">
+                <span style="font-size: 72pt; letter-spacing: -7pt;"><b style="font-weight: bolder;">Godot</b>
+                    4.2</span>
+                <span style="font-size: 40pt; letter-spacing: -4pt;"><b
+                        style="font-weight: bolder;">Professional</b></span>
+                <span id="builton" style="font-size: 12pt; ">Built on Web Technology</span>
+            </div>
 
-	function displayFailureNotice(err) {
-		const msg = err.message || err;
-		console.error(msg);
-		setStatusNotice(msg);
-		setStatusMode('notice');
-		initializing = false;
-	}
 
-	const missing = Engine.getMissingFeatures();
-	if (missing.length !== 0) {
-		const missingMsg = 'Error\nThe following features required to run Godot projects on the Web are missing:\n';
-		displayFailureNotice(missingMsg + missing.join('\n'));
-	} else {
-		setStatusMode('indeterminate');
-		engine.startGame({
-			'onProgress': function (current, total) {
-				if (total > 0) {
-					statusProgressInner.style.width = `${(current / total) * 100}%`;
-					setStatusMode('progress');
-					if (current === total) {
-						// wait for progress bar animation
-						setTimeout(() => {
-							setStatusMode('indeterminate');
-						}, 500);
-					}
-				} else {
-					setStatusMode('indeterminate');
-				}
-			},
-		}).then(() => {
-			setStatusMode('hidden');
-			initializing = false;
-		}, displayFailureNotice);
-	}
-}());
-		</script>
-	</body>
+        </div>
+        <div id="gradient">
+            <!-- spinner gradient thing -->
+        </div>
+        <div id="footer">
+            <!-- gray bit at bottom-->
+            <div id="startingupline">
+                <span style="margin-right: 10px">Starting up...</span>
+                <div id="loaderdiv">
+                    <div class="blk" id="1"> </div>
+                    <div class="blk" id="2"> </div>
+                    <div class="blk" id="3"> </div>
+                    <div class="blk" id="4"> </div>
+                    <div class="blk" id="5"> </div>
+                    <div class="blk" id="6"> </div>
+                    <div class="blk" id="7"> </div>
+                    <div class="blk" id="8"> </div>
+                    <div class="blk" id="9"> </div>
+                    <div class="blk" id="10"> </div>
+                    <div class="blk" id="11"> </div>
+                    <div class="blk" id="12"> </div>
+                    <div class="blk" id="13"> </div>
+                    <div class="blk" id="14"> </div>
+                    <div class="blk" id="15"> </div>
+                    <div class="blk" id="16"> </div>
+                    <div class="blk" id="17"> </div>
+                    <div class="blk" id="18"> </div>
+
+                </div>
+            </div>
+            <span>Copyright © 2024 Jayden Milne</span>
+        </div>
+    </div>
+    <div id="panic">
+    </div>
+    <script>
+        function iOS() {
+            return [
+                'iPad Simulator',
+                'iPhone Simulator',
+                'iPod Simulator',
+                'iPad',
+                'iPhone',
+                'iPod'
+            ].includes(navigator.platform)
+                // iPad on iOS 13 detection
+                || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+        }
+
+
+    </script>
+
+    <script src="godot-minesweeper.js"></script>
+    <script>
+
+        const GODOT_CONFIG = { "args": [], "canvasResizePolicy": 2, "executable": "godot-minesweeper", "experimentalVK": false, "fileSizes": { "godot-minesweeper.pck": 352800, "godot-minesweeper.wasm": 27913656 }, "focusCanvas": true, "gdextensionLibs": [] };
+        const engine = new Engine(GODOT_CONFIG);
+
+        (function () {
+            const statusProgress = document.getElementById('main');
+            const statusNotice = document.getElementById('panic');
+            const canvas = document.getElementById('canvas');
+            const loadingNubs = [];
+
+            for (let i = 1; i < 19; i++) {
+                loadingNubs.push(document.getElementById(i));
+            }
+
+            let initializing = true;
+            let statusMode = 'hidden';
+
+            if (iOS()) {
+                setTimeout(() => {
+                    if (initializing || true) {
+                        alert("There is currently a Safari Mobile bug that prevents Godot from loading. Maybe one day this will be fixed?")
+                    }
+                }
+                    , 15_000)
+            }
+
+            function setStatusMode(mode) {
+                if (statusMode === mode || !initializing) {
+                    return;
+                }
+                [statusProgress, statusNotice].forEach((elem) => {
+                    elem.style.display = 'none';
+                });
+                canvas.style.display = 'block';
+
+
+                switch (mode) {
+                    case 'progress':
+                        statusProgress.style.display = 'flex';
+                        canvas.style.display = 'none';
+
+                        break;
+                    case 'notice':
+                        statusNotice.style.display = 'block';
+                        statusProgress.style.display = 'flex';
+                        canvas.style.display = 'none';
+
+                        break;
+                    case 'hidden':
+                        break;
+                    default:
+                        throw new Error('Invalid status mode');
+                }
+                statusMode = mode;
+            }
+
+            function setStatusNotice(text) {
+                while (statusNotice.lastChild) {
+                    statusNotice.removeChild(statusNotice.lastChild);
+                }
+
+                const lines = [
+                    "panic(cpu 1 caller 0xffffff80218b7bd5): failed to load godot",
+                    "",
+                    ...text.split('\n'),
+                    "",
+                    "panic: We are hanging here..."
+                ];
+
+                lines.forEach((line) => {
+
+                    const el = document.createElement('span');
+                    el.className = 'panicline';
+                    el.textContent = line;
+                    statusNotice.appendChild(el);
+                    statusNotice.appendChild(document.createElement('br'));
+                });
+            }
+
+            function displayFailureNotice(err) {
+                const msg = err.message || err;
+                console.error(msg);
+                setStatusNotice(msg);
+                setStatusMode('notice');
+                initializing = false;
+            }
+
+            const missing = Engine.getMissingFeatures();
+            if (missing.length !== 0) {
+                const missingMsg = 'Error\nThe following features required to run Godot projects on the Web are missing:\n';
+                displayFailureNotice(missingMsg + missing.join('\n'));
+            } else {
+                engine.startGame({
+                    'onProgress': function (current, total) {
+                        setStatusMode('progress');
+                        console.log(current, total)
+
+                        let number_to_show = Math.floor((current / total) * 18);
+
+                        for (let i = 0; i <= number_to_show; i++) {
+                            loadingNubs[i].style.display = 'block';
+                        }
+
+                        engine.requestQuit();
+                    },
+                }).then(() => {
+                    engine.unload();
+                    console.warn("we have loaded");
+                    setStatusMode('hidden');
+                    initializing = false;
+                }, displayFailureNotice);
+            }
+        }());
+    </script>
+</body>
+
 </html>
-
