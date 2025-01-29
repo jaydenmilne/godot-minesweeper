@@ -3,6 +3,8 @@
 This is a recreation of Minesweeper from Windows 2000, written for Godot 4.1 
 using GDScript (for web export).
 
+https://minesweeper.jayd.ml
+
 AGPL v3 licensed
 
 ## Goals
