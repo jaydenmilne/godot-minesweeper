@@ -1,289 +1,173 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+		<title>godot-minesweeper</title>
+		<style>
+html, body, #canvas {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
 
-<head>
-    <title>godot-minesweeper</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no">
-    <script src="coi-serviceworker.js"></script>
-    <style>
-        html,
-        body {
-            touch-action: none;
-            margin: 0;
-            border: 0 none;
-            padding: 0;
-            text-align: center;
-            height: 100%;
-            width: 100%;
-            font-family: Arial, Helvetica, sans-serif;
-        }
+body {
+	color: white;
+	background-color: black;
+	overflow: hidden;
+	touch-action: none;
+}
 
-        #canvas {
-            display: block;
-            margin: 0;
-            color: white;
-            display: none;
-        }
+#canvas {
+	display: block;
+}
 
-        #canvas:focus {
-            outline: none;
-        }
+#canvas:focus {
+	outline: none;
+}
 
-        #main {
-            background-color: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            height: 100%;
-            width: 100%;
-            position: absolute;
-            left: 0;
-            top: 0;
-            right: 0;
-            bottom: 0;
+#status, #status-splash, #status-progress {
+	position: absolute;
+	left: 0;
+	right: 0;
+}
 
-        }
+#status, #status-splash {
+	top: 0;
+	bottom: 0;
+}
 
-        #panic {
-            position: absolute;
-            left: 0;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            text-align: left;
-            line-height: 1;
-            display: none;
+#status {
+	background-color: #242424;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	visibility: hidden;
+}
 
-        }
+#status-splash {
+	max-height: 100%;
+	max-width: 100%;
+	margin: auto;
+}
 
-        .panicline {
-            font-family: 'Courier New', Courier, monospace;
-            color: white;
-            background-color: black;
-        }
+#status-splash.show-image--false {
+	display: none;
+}
 
-        #logo {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-            justify-content: center;
-        }
+#status-splash.fullsize--true {
+	height: 100%;
+	width: 100%;
+	object-fit: contain;
+}
 
-        #logotext {
-            width: max-content;
-            font-size: 72pt;
-            display: flex;
-            flex-direction: column;
-            text-align: right;
-            line-height: 0.8;
-        }
+#status-splash.use-filter--false {
+	image-rendering: pixelated;
+}
 
+#status-progress, #status-notice {
+	display: none;
+}
 
-        #gradient {
-            background: linear-gradient(90deg, #00289F 0%, #00289F 36.72%, #0070DF 53.28%, #0070DF 83.44%, #00289F 100%);
-            min-height: 10px;
-            max-height: 20px;
-        }
+#status-progress {
+	bottom: 10%;
+	width: 50%;
+	margin: 0 auto;
+}
 
-
-        #footer {
-            background-color: #C0C0C0;
-            min-height: 70px;
-            max-height: 100px;
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-            justify-content: space-evenly;
-        }
-
-        #loaderdiv {
-            display: flex;
-            border: #7E7D80;
-            border-bottom-color: #FEFFFF;
-            border-right-color: #FEFFFF;
-
-            border-style: solid;
-            width: 330px;
-            border-width: 2px;
-            height: 16px;
-        }
-
-        .blk {
-            width: 16px;
-            height: 16px;
-            margin-right: 2px;
-            background-color: #002895;
-            display: none;
-        }
-
-        #startingupline {
-            display: flex;
-        }
-    </style>
-    <link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.png" />
+#status-notice {
+	background-color: #5b3943;
+	border-radius: 0.5rem;
+	border: 1px solid #9b3943;
+	color: #e0e0e0;
+	font-family: 'Noto Sans', 'Droid Sans', Arial, sans-serif;
+	line-height: 1.3;
+	margin: 0 2rem;
+	overflow: hidden;
+	padding: 1rem;
+	text-align: center;
+	z-index: 1;
+}
+		</style>
+		<link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.png" />
 <link rel="apple-touch-icon" href="index.apple-touch-icon.png"/>
 
-</head>
+	</head>
+	<body>
+		<canvas id="canvas">
+			Your browser does not support the canvas tag.
+		</canvas>
 
-<body>
-    <canvas id="canvas">
-        HTML5 canvas appears to be unsupported in the current browser.<br>
-        Please try updating or use a different browser.
-    </canvas>
+		<noscript>
+			Your browser does not support JavaScript.
+		</noscript>
 
-    <div id="main">
-        <!-- main contianer div -->
-        <div id="logo">
-            <div id="logotext">
-                <span style="font-size: 72pt; letter-spacing: -7pt;"><b style="font-weight: bolder;">Godot</b>
-                    4.4</span>
-                <span style="font-size: 40pt; letter-spacing: -4pt;"><b
-                        style="font-weight: bolder;">Professional</b></span>
-                <span id="builton" style="font-size: 12pt; ">Built on Web Technology</span>
-            </div>
+		<div id="status">
+			<img id="status-splash" class="show-image--true fullsize--true use-filter--true" src="index.png" alt="">
+			<progress id="status-progress"></progress>
+			<div id="status-notice"></div>
+		</div>
 
-
-        </div>
-        <div id="gradient">
-            <!-- spinner gradient thing -->
-        </div>
-        <div id="footer">
-            <!-- gray bit at bottom-->
-            <div id="startingupline">
-                <span style="margin-right: 10px">Starting up...</span>
-                <div id="loaderdiv">
-                    <div class="blk" id="1"> </div>
-                    <div class="blk" id="2"> </div>
-                    <div class="blk" id="3"> </div>
-                    <div class="blk" id="4"> </div>
-                    <div class="blk" id="5"> </div>
-                    <div class="blk" id="6"> </div>
-                    <div class="blk" id="7"> </div>
-                    <div class="blk" id="8"> </div>
-                    <div class="blk" id="9"> </div>
-                    <div class="blk" id="10"> </div>
-                    <div class="blk" id="11"> </div>
-                    <div class="blk" id="12"> </div>
-                    <div class="blk" id="13"> </div>
-                    <div class="blk" id="14"> </div>
-                    <div class="blk" id="15"> </div>
-                    <div class="blk" id="16"> </div>
-                    <div class="blk" id="17"> </div>
-                    <div class="blk" id="18"> </div>
-
-                </div>
-            </div>
-            <span>Copyright © 2024 Jayden Milne</span>
-        </div>
-    </div>
-    <div id="panic">
-    </div>
-    <script>
-        function iOS() {
-            return [
-                'iPad Simulator',
-                'iPhone Simulator',
-                'iPod Simulator',
-                'iPad',
-                'iPhone',
-                'iPod'
-            ].includes(navigator.platform)
-                // iPad on iOS 13 detection
-                || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
-        }
-
-
-    </script>
-
-    <script src="index.js"></script>
-    <script>
+		<script src="index.js"></script>
+		<script>
 const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":349936,"index.wasm":43682606},"focusCanvas":true,"gdextensionLibs":[]};
 const GODOT_THREADS_ENABLED = false;
-
 const engine = new Engine(GODOT_CONFIG);
 
 (function () {
-    const statusProgress = document.getElementById('main');
-    const statusNotice = document.getElementById('panic');
-    const canvas = document.getElementById('canvas');
-    const loadingNubs = [];
+	const statusOverlay = document.getElementById('status');
+	const statusProgress = document.getElementById('status-progress');
+	const statusNotice = document.getElementById('status-notice');
 
-    for (let i = 1; i < 19; i++) {
-        loadingNubs.push(document.getElementById(i));
-    }
+	let initializing = true;
+	let statusMode = '';
 
-    let initializing = true;
-    let statusMode = 'hidden';
+	function setStatusMode(mode) {
+		if (statusMode === mode || !initializing) {
+			return;
+		}
+		if (mode === 'hidden') {
+			statusOverlay.remove();
+			initializing = false;
+			return;
+		}
+		statusOverlay.style.visibility = 'visible';
+		statusProgress.style.display = mode === 'progress' ? 'block' : 'none';
+		statusNotice.style.display = mode === 'notice' ? 'block' : 'none';
+		statusMode = mode;
+	}
 
-    function setStatusMode(mode) {
-        if (statusMode === mode || !initializing) {
-            return;
-        }
-        [statusProgress, statusNotice].forEach((elem) => {
-            elem.style.display = 'none';
-        });
-        canvas.style.display = 'block';
+	function setStatusNotice(text) {
+		while (statusNotice.lastChild) {
+			statusNotice.removeChild(statusNotice.lastChild);
+		}
+		const lines = text.split('\n');
+		lines.forEach((line) => {
+			statusNotice.appendChild(document.createTextNode(line));
+			statusNotice.appendChild(document.createElement('br'));
+		});
+	}
 
+	function displayFailureNotice(err) {
+		console.error(err);
+		if (err instanceof Error) {
+			setStatusNotice(err.message);
+		} else if (typeof err === 'string') {
+			setStatusNotice(err);
+		} else {
+			setStatusNotice('An unknown error occurred.');
+		}
+		setStatusMode('notice');
+		initializing = false;
+	}
 
-        switch (mode) {
-            case 'progress':
-                statusProgress.style.display = 'flex';
-                canvas.style.display = 'none';
+	const missing = Engine.getMissingFeatures({
+		threads: GODOT_THREADS_ENABLED,
+	});
 
-                break;
-            case 'notice':
-                statusNotice.style.display = 'block';
-                statusProgress.style.display = 'flex';
-                canvas.style.display = 'none';
-
-                break;
-            case 'hidden':
-                break;
-            default:
-                throw new Error('Invalid status mode');
-        }
-        statusMode = mode;
-    }
-
-    function setStatusNotice(text) {
-        while (statusNotice.lastChild) {
-            statusNotice.removeChild(statusNotice.lastChild);
-        }
-
-        const lines = [
-            "panic(cpu 1 caller 0xffffff80218b7bd5): failed to load godot",
-            "",
-            ...text.split('\n'),
-            "",
-            "panic: We are hanging here..."
-        ];
-
-        lines.forEach((line) => {
-
-            const el = document.createElement('span');
-            el.className = 'panicline';
-            el.textContent = line;
-            statusNotice.appendChild(el);
-            statusNotice.appendChild(document.createElement('br'));
-        });
-    }
-
-    function displayFailureNotice(err) {
-        const msg = err.message || err;
-        console.error(msg);
-        setStatusNotice(msg);
-        setStatusMode('notice');
-        initializing = false;
-    }
-
-    const missing = Engine.getMissingFeatures({
-        threads: GODOT_THREADS_ENABLED,
-    });
-    if (missing.length !== 0) {
-        if (GODOT_CONFIG['serviceWorker'] && GODOT_CONFIG['ensureCrossOriginIsolationHeaders'] && 'serviceWorker' in navigator) {
+	if (missing.length !== 0) {
+		if (GODOT_CONFIG['serviceWorker'] && GODOT_CONFIG['ensureCrossOriginIsolationHeaders'] && 'serviceWorker' in navigator) {
 			let serviceWorkerRegistrationPromise;
 			try {
 				serviceWorkerRegistrationPromise = navigator.serviceWorker.getRegistration();
@@ -313,25 +197,24 @@ const engine = new Engine(GODOT_CONFIG);
 			const missingMsg = 'Error\nThe following features required to run Godot projects on the Web are missing:\n';
 			displayFailureNotice(missingMsg + missing.join('\n'));
 		}
-    } else {
-        engine.startGame({
-            'onProgress': function (current, total) {
-                setStatusMode('progress');
-
-                let number_to_show = Math.floor((current / total)) * (loadingNubs.length - 1)   ;
-
-                for (let i = 0; i <= number_to_show; i++) {
-                    loadingNubs[i].style.display = 'block';
-                }
-            },
-        }).then(() => {
-            console.warn("we have loaded");
-            setStatusMode('hidden');
-            initializing = false;
-        }, displayFailureNotice);
-    }
+	} else {
+		setStatusMode('progress');
+		engine.startGame({
+			'onProgress': function (current, total) {
+				if (current > 0 && total > 0) {
+					statusProgress.value = current;
+					statusProgress.max = total;
+				} else {
+					statusProgress.removeAttribute('value');
+					statusProgress.removeAttribute('max');
+				}
+			},
+		}).then(() => {
+			setStatusMode('hidden');
+		}, displayFailureNotice);
+	}
 }());
-    </script>
-</body>
-
+		</script>
+	</body>
 </html>
+
