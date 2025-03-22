@@ -1,6 +1,6 @@
-[gd_scene load_steps=13 format=3 uid="uid://cvoiy5pk06wqi"]
+[gd_scene load_steps=13 format=3 uid="uid://v1sn8rupbw32"]
 
-[ext_resource type="Script" uid="uid://barpvg2bsawss" path="res://minesweeper.gd" id="1_7x103"]
+[ext_resource type="Script" path="res://minesweeper.gd" id="1_7x103"]
 [ext_resource type="Texture2D" uid="uid://vxddt0wejw83" path="res://bitmap/9patch_bw_texture.tres" id="2_8dni1"]
 [ext_resource type="PackedScene" uid="uid://bi7dgcbwgxd7j" path="res://counter.tscn" id="3_nlgsr"]
 [ext_resource type="Texture2D" uid="uid://sw5od8doucr0" path="res://bitmap/face/button_frame.png" id="4_awbk7"]
