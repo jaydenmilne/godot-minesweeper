@@ -1,6 +1,6 @@
 [gd_scene load_steps=18 format=3 uid="uid://5dddejbf4b5x"]
 
-[ext_resource type="Script" path="res://gui/highscore/fastest_minesweepers/fastest_minesweepers.gd" id="1_a70r5"]
+[ext_resource type="Script" uid="uid://unnte7s7alyb" path="res://gui/highscore/fastest_minesweepers/fastest_minesweepers.gd" id="1_a70r5"]
 [ext_resource type="Texture2D" uid="uid://crnvlj5nxxwbw" path="res://gui/highscore/fastest_minesweepers/fastest_mine_sweepers.png" id="1_pi01g"]
 [ext_resource type="Texture2D" uid="uid://csgmf3qb05qtn" path="res://gui/highscore/fastest_minesweepers/ok/fastest_mine_sweepers_ok.png" id="2_jqv16"]
 [ext_resource type="Texture2D" uid="uid://bmfsjyt760xjj" path="res://gui/highscore/fastest_minesweepers/fastest_mine_sweepers_disabled.png" id="3_0nbro"]
@@ -35,7 +35,7 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_riuk2"]
 _data = {
-"blink": SubResource("Animation_3g218")
+&"blink": SubResource("Animation_3g218")
 }
 
 [node name="fastest_minesweepers" type="Control"]

@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dkw5woflnj55d"]
 
 [ext_resource type="Texture2D" uid="uid://87ywh2l10knb" path="res://gui/menubar/game/beginner_hover.png" id="1_qddxy"]
-[ext_resource type="Script" path="res://gui/menubar/menu_check_button.gd" id="2_4p7pe"]
+[ext_resource type="Script" uid="uid://bqe2mnghnda3h" path="res://gui/menubar/menu_check_button.gd" id="2_4p7pe"]
 [ext_resource type="PackedScene" uid="uid://c3phwilxdkiy" path="res://gui/menubar/check.tscn" id="2_ciykg"]
 
 [node name="Button" type="TextureButton"]

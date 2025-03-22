@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://bea0veoviwaq8"]
 
-[ext_resource type="Script" path="res://gui/menubar/help/HelpModal.gd" id="1_c26ru"]
+[ext_resource type="Script" uid="uid://b1as2646ar6ar" path="res://gui/menubar/help/HelpModal.gd" id="1_c26ru"]
 [ext_resource type="Texture2D" uid="uid://djnamnyv13ndl" path="res://gui/menubar/help/help_modal.png" id="1_foubd"]
 [ext_resource type="PackedScene" uid="uid://dfye7os5krgij" path="res://gui/title_bar_drag_zone.tscn" id="2_5eti0"]
 [ext_resource type="Texture2D" uid="uid://ddrisd3030f5r" path="res://gui/close/x.png" id="3_oly0c"]
@@ -38,9 +38,8 @@ texture_normal = ExtResource("3_oly0c")
 texture_pressed = ExtResource("4_q5qb2")
 
 [node name="WhatElseDoYouWant" type="AcceptDialog" parent="."]
-title = "Uhh"
-dialog_text = "No, I didn't make this dialog work
-You expect too much"
+title = "So about that"
+dialog_text = "I didn't actually make this dialog work, it's just kind of for show. Sorry?"
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="update_window_position" from="TitleBarDragZone" to="." method="_on_title_bar_drag_zone_update_window_position"]

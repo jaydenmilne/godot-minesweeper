@@ -26,27 +26,22 @@ func _ready():
 		memory_kb = OS.get_static_memory_usage() / 1024
 		
 		$FreeMemory.text = "Physical memory used by Godot: %s KB" % comma_sep(memory_kb)
-		
-	
-	
+
 func _on_title_bar_drag_zone_update_window_position(pos):
 	self.set_global_position(pos)
 
-
 func _on_ok_pressed():
 	self.hide()
-
 
 func _on_source_code_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.pressed:
 			OS.shell_open("https://github.com/jaydenmilne/godot-minesweeper")
 
-
 func _on_font_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.pressed:
-			OS.shell_open("https://w95font.com/")
+			OS.shell_open("https://web.archive.org/web/20230326165147/https://w95font.com/")
 
 
 func _on_license_gui_input(event):

@@ -1,3 +1,4 @@
+"""I AM NOT PROUD OF THIS BUT IT KIND OF WORKS OK??"""
 extends Control
 
 ## STATE VARIABLES
@@ -21,6 +22,9 @@ var cell_data = []
 var clicking = false
 """Game allows you to click and drag and the cells are updated as you move. This
 is used to emulate that"""
+
+var chording = false
+"""doing the middle clicking chording thing"""
 
 var mouseover = false
 """Used to determine if we can apply the stopped clock cheat"""
@@ -111,17 +115,16 @@ func change_game_state(new_state: GameState):
 		if enable_sound:
 			$Sound.stream = SOUND_KABOOM
 			$Sound.play()
+	var save_manager = self.get_node("/root/SaveManager")
 	
 	var game_over_won = func():
-		# Why does this crash here (save_manager is not defined???)
-		# save_manager.clear_save_game()
+		save_manager.clear_save_game()
 		$Timer.stop()
 		set_face(FACE_COOL)
 		if enable_sound:
 			$Sound.stream = SOUND_WIN
 			$Sound.play()
 
-		var save_manager = self.get_node("/root/SaveManager")
 		if save_manager.has_high_score(self.time, $MenuBar.difficulty):
 			$fastest_time_modal.show_modal($MenuBar.difficulty)
 			var new_name = await $fastest_time_modal.player_name
@@ -279,7 +282,7 @@ func handle_first_click_mine(location: Vector2i) -> void:
 func save() -> void:
 	save_manager.save_game_state(self.time, self.mines_remaining, self.cell_data)
 
-func click_cell(location: Vector2i) -> void:
+func click_cell(location: Vector2i, flood=true) -> void:
 	var cell = cell_data[location.y][location.x]
 	if cell & FLAG_REVEALED:
 		# no sense doing anything if its been clicked
@@ -308,6 +311,8 @@ func click_cell(location: Vector2i) -> void:
 		return # no flooding if you clicked on a number
 	$Grid.set_cell(0, location, 0, EMPTY, 0)
 	
+	if not flood:
+		return
 	# BFS
 	var queue = [location]
 	while len(queue):
@@ -361,6 +366,42 @@ func game_is_won():
 				return false
 	return true
 
+func do_chord(location: Vector2i):
+	var cell = cell_data[location.y][location.x]
+	if not(cell & NUMBER_MASK) || not(cell & FLAG_REVEALED):
+		# do nothing
+		return
+	# so we have a number. Get the number, and 
+	# that many flags around it. If there are, reveal that many mines
+	var cell_val = cell & NUMBER_MASK
+
+	var flag_count = 0
+	# count the flags adjacent to this cell
+	for x in range(location[0] - 1, location[0] + 2):
+		for y in range(location[1] - 1, location[1] + 2):
+			var grid_loc = Vector2i(x, y)
+			if loc_in_grid(grid_loc) and cell_data[y][x] & FLAG_FLAG:
+				flag_count += 1
+
+	if flag_count != cell_val:
+		return
+
+	# click on every non-flagged cell!
+	for x in range(location[0] - 1, location[0] + 2):
+		for y in range(location[1] - 1, location[1] + 2):
+			var grid_loc = Vector2i(x, y)
+			if loc_in_grid(grid_loc) and not(cell_data[y][x] & FLAG_FLAG):
+				self.click_cell(Vector2i(x, y), false)
+				
+func reset_face():
+	var face_texture = FACE_HAPPY
+	if current_state == GameState.GAME_OVER_LOST:
+		face_texture = FACE_DEAD
+	elif current_state == GameState.GAME_OVER_WON:
+		face_texture = FACE_COOL
+		
+	set_face(face_texture)
+
 func _gui_input(event) -> void:
 	if event is InputEventMouseButton:
 		if current_state not in [GameState.GAME_RUNNING, GameState.READY_TO_START]:
@@ -369,7 +410,11 @@ func _gui_input(event) -> void:
 			if event.pressed and event.position.y >= 40:
 				# always set face to shocked, the game does this for some reason
 				set_face(FACE_OOOOOO)
-				clicking = true
+				if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+					# they're actually chording
+					chording = true
+				else:
+					clicking = true
 			else:
 				# mouseup
 				
@@ -378,24 +423,52 @@ func _gui_input(event) -> void:
 				# we call are scale dependent
 				var click_grid_location = global2grid(self.get_global_mouse_position())
 				if loc_in_grid(click_grid_location):
-					if clicking and current_state == GameState.READY_TO_START:
+					if (clicking or chording) and current_state == GameState.READY_TO_START:
 						change_game_state(GameState.GAME_RUNNING)
 						handle_first_click_mine(click_grid_location)
-						
-					click_cell(click_grid_location)
+					if chording:
+						self.do_chord(click_grid_location)
+					else:
+						click_cell(click_grid_location)
 				clicking = false
+				chording = false
 				$Grid.clear_layer(1)
-				var face_texture = FACE_HAPPY
-				if current_state == GameState.GAME_OVER_LOST:
-					face_texture = FACE_DEAD
-				elif current_state == GameState.GAME_OVER_WON:
-					face_texture = FACE_COOL
-					
-				set_face(face_texture)
-		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-			var location = global2grid(event.global_position)
-			if loc_in_grid(location):
-				right_click_cell(location)
+				self.reset_face()
+		elif event.button_index == MOUSE_BUTTON_MIDDLE:
+			if event.pressed and event.position.y >= 40:
+				set_face(FACE_OOOOOO)
+				chording = true
+			else:
+				chording = false
+				$Grid.clear_layer(1)
+				var click_grid_location = global2grid(self.get_global_mouse_position())
+				if loc_in_grid(click_grid_location):
+					self.do_chord(click_grid_location)
+				# this starts the game for some reason
+				if current_state == GameState.READY_TO_START:
+						change_game_state(GameState.GAME_RUNNING)
+				self.reset_face()
+				
+		elif event.button_index == MOUSE_BUTTON_RIGHT:
+			if event.pressed:
+				if clicking:
+					# now we're chording!
+					chording = true
+				else:
+					# just a regular right click
+					var location = global2grid(event.global_position)
+					if loc_in_grid(location):
+						right_click_cell(location)
+			else:
+				# if we were chording, we aren't anymore
+				chording = false
+
+				if chording:
+					var location = global2grid(event.global_position)
+					if loc_in_grid(location):
+						self.do_chord(location)
+
+
 
 func show_board() -> void:
 	"""End-of-game board state"""
@@ -536,19 +609,31 @@ func _process(_delta):
 			# left and right click cheat
 			print("enabling stopped clock cheat")
 			$Timer.stop()
+
+	var pseudo_press = func(grid_loc: Vector2i):
+		var clicked_cell_type = get_cell_type(grid_loc)
+		var set_cell = func(type):
+			$Grid.set_cell(1, grid_loc, 0, type, 0)
+		
+		if clicked_cell_type == BLANK:
+			set_cell.call(EMPTY)
+		elif clicked_cell_type == QUESTION:
+			set_cell.call(QUESTION_PRESSED)
+
 	if clicking:
 		$Grid.clear_layer(1)
 		var grid_loc = global2grid(self.get_global_mouse_position())
 		if loc_in_grid(grid_loc):
-			var clicked_cell_type = get_cell_type(grid_loc)
-			var set_cell = func(type):
-				$Grid.set_cell(1, grid_loc, 0, type, 0)
-			
-			if clicked_cell_type == BLANK:
-				set_cell.call(EMPTY)
-			elif clicked_cell_type == QUESTION:
-				set_cell.call(QUESTION_PRESSED)
-			
+			pseudo_press.call(grid_loc)
+	if chording:
+		$Grid.clear_layer(1)
+		var middle_click_loc = global2grid(self.get_global_mouse_position())
+		for x in range(middle_click_loc[0] - 1, middle_click_loc[0] + 2):
+			for y in range(middle_click_loc[1] - 1, middle_click_loc[1] + 2):
+				var grid_loc = Vector2i(x, y)
+				if loc_in_grid(grid_loc):
+					pseudo_press.call(grid_loc)
+
 
 func _on_face_button_pressed():
 	change_game_state(GameState.READY_TO_START)

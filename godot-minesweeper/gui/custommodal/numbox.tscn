@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://8gngbugi63d7"]
 
-[ext_resource type="Script" path="res://gui/custommodal/numbox.gd" id="1_jurdw"]
+[ext_resource type="Script" uid="uid://dux8a7yhns7kw" path="res://gui/custommodal/numbox.gd" id="1_jurdw"]
 
 [node name="NumBox" type="LineEdit"]
 offset_right = 86.0

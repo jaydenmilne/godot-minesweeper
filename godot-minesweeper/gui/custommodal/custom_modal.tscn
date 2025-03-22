@@ -1,7 +1,7 @@
 [gd_scene load_steps=19 format=3 uid="uid://ds0vch7nlj15y"]
 
 [ext_resource type="Texture2D" uid="uid://b88slcg3c60ov" path="res://gui/custommodal/custom_modal.png" id="1_wl1il"]
-[ext_resource type="Script" path="res://gui/custommodal/custom_modal.gd" id="2_6afgk"]
+[ext_resource type="Script" uid="uid://cvh6ftpqkgy02" path="res://gui/custommodal/custom_modal.gd" id="2_6afgk"]
 [ext_resource type="PackedScene" uid="uid://8gngbugi63d7" path="res://gui/custommodal/numbox.tscn" id="2_eebrp"]
 [ext_resource type="Texture2D" uid="uid://vwa2f4v77l03" path="res://gui/custommodal/ok/ok.png" id="4_uwt4d"]
 [ext_resource type="Texture2D" uid="uid://dema30d8g2buj" path="res://gui/custommodal/ok/ok_pressed.png" id="5_oaueb"]
@@ -50,8 +50,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_6liqw"]
 _data = {
-"RESET": SubResource("Animation_dlj41"),
-"blink": SubResource("Animation_2p57e")
+&"RESET": SubResource("Animation_dlj41"),
+&"blink": SubResource("Animation_2p57e")
 }
 
 [node name="Control" type="Control"]
@@ -82,9 +82,9 @@ texture = ExtResource("1_wl1il")
 [node name="Width" parent="." instance=ExtResource("2_eebrp")]
 layout_mode = 0
 offset_left = 66.0
-offset_top = 81.0
+offset_top = 78.0
 offset_right = 99.0
-offset_bottom = 97.0
+offset_bottom = 100.0
 focus_next = NodePath("../Mines")
 focus_previous = NodePath("../Height")
 theme = ExtResource("14_qv1sw")
@@ -93,9 +93,9 @@ text = "9"
 [node name="Height" parent="." instance=ExtResource("2_eebrp")]
 layout_mode = 0
 offset_left = 66.0
-offset_top = 57.0
+offset_top = 54.0
 offset_right = 99.0
-offset_bottom = 73.0
+offset_bottom = 76.0
 focus_next = NodePath("../Width")
 theme = ExtResource("14_qv1sw")
 text = "9"
@@ -103,9 +103,9 @@ text = "9"
 [node name="Mines" parent="." instance=ExtResource("2_eebrp")]
 layout_mode = 0
 offset_left = 66.0
-offset_top = 105.0
+offset_top = 102.0
 offset_right = 99.0
-offset_bottom = 121.0
+offset_bottom = 124.0
 focus_next = NodePath("../OK")
 focus_previous = NodePath("../Width")
 theme = ExtResource("14_qv1sw")
@@ -157,7 +157,7 @@ mode = 2
 title = ""
 size = Vector2i(205, 100)
 theme = ExtResource("14_qv1sw")
-ok_button_text = "Achievement Get!"
+ok_button_text = "Hooray!"
 dialog_text = "You have unlocked FULLY CUSTOM minesweeper games"
 dialog_autowrap = true
 
@@ -167,7 +167,7 @@ position = Vector2(-236, -236)
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../CustomModal")
 libraries = {
-"": SubResource("AnimationLibrary_6liqw")
+&"": SubResource("AnimationLibrary_6liqw")
 }
 
 [node name="TitleBarDragZone" parent="." instance=ExtResource("16_naxfe")]

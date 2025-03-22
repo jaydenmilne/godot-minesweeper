@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://bagb4oxjuitug"]
 
-[ext_resource type="Script" path="res://gui/highscore/fastest_time/fastest_time_modal.gd" id="1_ro4em"]
+[ext_resource type="Script" uid="uid://cxqyn0t0slx2f" path="res://gui/highscore/fastest_time/fastest_time_modal.gd" id="1_ro4em"]
 [ext_resource type="Texture2D" uid="uid://by6si6laf3vhr" path="res://gui/highscore/fastest_time/fastest_time.png" id="1_xbfpl"]
 [ext_resource type="Texture2D" uid="uid://boekrwi71xsvu" path="res://gui/highscore/fastest_time/ok/fastest_ok.png" id="2_vdkuy"]
 [ext_resource type="Texture2D" uid="uid://catefplp7duo7" path="res://gui/highscore/fastest_time/ok/fastest_ok_pressed.png" id="3_owa2v"]

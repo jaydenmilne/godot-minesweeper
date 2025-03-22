@@ -1,7 +1,7 @@
 [gd_scene load_steps=29 format=3 uid="uid://dexhilxkt3sfx"]
 
 [ext_resource type="Texture2D" uid="uid://dptaxss6pbff" path="res://gui/menubar/game/game.png" id="1_rfm8j"]
-[ext_resource type="Script" path="res://gui/menubar/menu_bar.gd" id="1_t4bap"]
+[ext_resource type="Script" uid="uid://2wdsq7rkolpo" path="res://gui/menubar/menu_bar.gd" id="1_t4bap"]
 [ext_resource type="Texture2D" uid="uid://u6ekak576bqm" path="res://gui/menubar/game/game_pressed.png" id="2_q58sv"]
 [ext_resource type="Texture2D" uid="uid://crq736u0dbxqs" path="res://gui/menubar/game/game_hover.png" id="3_d1iuc"]
 [ext_resource type="Texture2D" uid="uid://3503mxy0k3bb" path="res://gui/menubar/game/help.png" id="4_lvg2a"]

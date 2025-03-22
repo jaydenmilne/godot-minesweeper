@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://bhyw6mgi2qkeu"]
 
-[ext_resource type="Script" path="res://gui/menubar/help/AboutDialog.gd" id="1_op6pb"]
+[ext_resource type="Script" uid="uid://jgx2maadutu5" path="res://gui/menubar/help/AboutDialog.gd" id="1_op6pb"]
 [ext_resource type="Texture2D" uid="uid://d35otptfh30v4" path="res://gui/menubar/help/about_modal.png" id="1_ppl75"]
 [ext_resource type="PackedScene" uid="uid://dfye7os5krgij" path="res://gui/title_bar_drag_zone.tscn" id="2_0u3tq"]
 [ext_resource type="Texture2D" uid="uid://ddrisd3030f5r" path="res://gui/close/x.png" id="3_nexxb"]

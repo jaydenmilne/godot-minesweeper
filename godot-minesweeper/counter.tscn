@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://bi7dgcbwgxd7j"]
 
 [ext_resource type="Texture2D" uid="uid://d3eenm58n636" path="res://counter.png" id="1_gxca1"]
-[ext_resource type="Script" path="res://counter.gd" id="2_8cg0m"]
+[ext_resource type="Script" uid="uid://csau46q4b1dgs" path="res://counter.gd" id="2_8cg0m"]
 [ext_resource type="Texture2D" uid="uid://ql683dwfosms" path="res://bitmap/numbers/dash.tres" id="2_exovp"]
 
 [node name="Counter" type="TextureRect"]

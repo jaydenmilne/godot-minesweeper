@@ -3,15 +3,16 @@
 [ext_resource type="FontFile" uid="uid://hlxepvuad0ne" path="res://gui/W95FA.otf" id="1_0d4n7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k6fv7"]
-bg_color = Color(1, 1, 1, 1)
+bg_color = Color(1, 1, 1, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c1kwp"]
-bg_color = Color(1, 1, 1, 1)
+bg_color = Color(1, 1, 1, 0)
 
 [resource]
 default_font = ExtResource("1_0d4n7")
 default_font_size = 13
 LineEdit/colors/caret_color = Color(0, 0, 0, 1)
+LineEdit/colors/clear_button_color = Color(0.875, 0.875, 0.875, 1)
 LineEdit/colors/font_color = Color(0, 0, 0, 1)
 LineEdit/colors/selection_color = Color(0.0392157, 0.141176, 0.415686, 1)
 LineEdit/styles/focus = SubResource("StyleBoxFlat_k6fv7")
